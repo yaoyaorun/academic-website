@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product | Multi-Sited Belonging with AI</title>
+  <meta name="description" content="A forthcoming product page for the Multi-Sited Belonging with AI project.">
+  <meta property="og:title" content="Product | Multi-Sited Belonging with AI">
+  <meta property="og:description" content="Coming soon.">
+  <meta property="og:type" content="website">
+  <!-- REPLACE: Update og:url with your GitHub Pages URL. -->
+  <meta property="og:url" content="https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPOSITORY/product.html">
+  <!-- REPLACE: Update og:image with an absolute URL to your preferred preview image. -->
+  <meta property="og:image" content="https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPOSITORY/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter:wght@200;300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="product">
+  <header class="site-header">
+    <a class="site-mark" href="index.html" aria-label="Multi-Sited Belonging with AI home">Multi-Sited Belonging with AI</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="nav-toggle__bar"></span>
+      <span class="sr-only">Menu</span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+      <a href="index.html" data-nav="home">Home</a>
+      <a href="research-team.html" data-nav="team">Research Team</a>
+      <a href="participant-info.html" data-nav="participants">For Participants</a>
+      <a href="wellbeing-resource.html" data-nav="wellbeing">Wellbeing</a>
+      <a href="recruitment.html" data-nav="recruitment">Recruitment</a>
+      <a href="blog.html" data-nav="blog">Blog</a>
+      <a href="product.html" data-nav="product">Product</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="coming-soon" aria-labelledby="product-heading">
+      <p class="eyebrow">Product</p>
+      <h1 id="product-heading">Coming soon</h1>
+      <!-- REPLACE: Replace this teaser line when you are ready. -->
+      <p>A small, careful thing is taking shape.</p>
+    </section>
+
+    <section class="section form-section" aria-labelledby="feedback-heading">
+      <div class="section__heading">
+        <p class="eyebrow">Feedback</p>
+        <h2 id="feedback-heading">Send a Note</h2>
+      </div>
+
+      <!-- REPLACE: Replace YOUR_FORM_ID in the action URL with your Formspree form ID. -->
+      <form class="feedback-form" data-formspree-form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="form-row">
+          <label for="name">Name <span>(optional)</span></label>
+          <input id="name" name="name" type="text" autocomplete="name">
+        </div>
+        <div class="form-row">
+          <label for="email">Email <span>(optional)</span></label>
+          <input id="email" name="email" type="email" autocomplete="email">
+        </div>
+        <div class="form-row">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="6" required></textarea>
+        </div>
+        <button class="button button--primary" type="submit">Submit</button>
+        <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span data-year></span> Multi-Sited Belonging with AI. Built as a static site for GitHub Pages.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

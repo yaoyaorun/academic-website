@@ -1,0 +1,81 @@
+@page {
+  margin: 18mm;
+}
+
+* {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+html,
+body {
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-size: 11pt;
+}
+
+body::before,
+.site-header,
+.site-footer,
+.nav-toggle,
+.document-actions {
+  display: none !important;
+}
+
+main,
+.pis-page {
+  max-width: none;
+  padding: 0;
+}
+
+.pis-document {
+  background: #ffffff !important;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #000000 !important;
+  text-decoration: underline;
+}
+
+.language-note {
+  border: 1px solid #777777;
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.eyebrow {
+  color: #000000 !important;
+}
+
+h1 {
+  font-size: 24pt;
+}
+
+h2 {
+  font-size: 16pt;
+  page-break-after: avoid;
+}
+
+h3 {
+  page-break-after: avoid;
+}
+
+p,
+li,
+dd,
+dt {
+  orphans: 3;
+  widows: 3;
+}
+
+.pis-section {
+  border-color: #bbbbbb;
+  page-break-inside: avoid;
+}
+
+.pis-meta div {
+  border-color: #bbbbbb;
+}
