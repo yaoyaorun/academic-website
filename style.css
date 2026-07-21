@@ -26,7 +26,7 @@ html {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 15.5px;
+  font-size: 15px;
   font-weight: 300;
   line-height: 1.65;
 }
@@ -91,15 +91,15 @@ h4 {
 }
 
 h1 {
-  font-size: clamp(2.35rem, 7vw, 5.2rem);
+  font-size: clamp(2.15rem, 6.4vw, 4.8rem);
 }
 
 h2 {
-  font-size: clamp(1.65rem, 4vw, 2.75rem);
+  font-size: clamp(1.5rem, 3.6vw, 2.45rem);
 }
 
 h3 {
-  font-size: 1.22rem;
+  font-size: 1.12rem;
 }
 
 h4 {
@@ -410,7 +410,7 @@ main {
 
 .subtitle {
   color: var(--muted);
-  font-size: clamp(0.98rem, 1.6vw, 1.22rem);
+  font-size: clamp(0.92rem, 1.45vw, 1.12rem);
   font-weight: 300;
   margin-top: 0.8rem;
 }
