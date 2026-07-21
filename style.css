@@ -34,6 +34,7 @@ html {
 body {
   margin: 0;
   min-width: 320px;
+  overflow-x: clip;
 }
 
 body::before {
@@ -220,7 +221,7 @@ main {
   align-items: end;
   display: grid;
   min-height: calc(100vh - 72px);
-  overflow: hidden;
+  overflow: visible;
   padding: clamp(4rem, 9vw, 8rem) 0 clamp(3rem, 7vw, 5rem);
   position: relative;
 }
@@ -266,6 +267,7 @@ main {
 .ripple {
   border: 1px solid rgba(111, 129, 124, 0.16);
   border-radius: 50%;
+  border-style: solid;
   height: clamp(88px, 14vw, 170px);
   left: 65%;
   opacity: 0.58;
