@@ -293,7 +293,6 @@ main {
 
 .ripple--three {
   border-color: rgba(128, 149, 143, 0.28);
-  border-style: dashed;
   height: clamp(145px, 21vw, 250px);
   left: 59%;
   opacity: 0.4;
