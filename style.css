@@ -828,8 +828,21 @@ textarea {
   margin-top: 1rem;
 }
 
+.pis-extracted-text h3 {
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 1.15rem;
+}
+
 .pis-extracted-text p {
   color: var(--ink);
+}
+
+.pis-extracted-text .pis-meta-line {
+  color: var(--muted);
+  font-size: 0.95rem;
 }
 
 .pis-extracted-text .pis-bullet-line {
