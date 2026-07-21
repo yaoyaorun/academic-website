@@ -239,12 +239,12 @@ main {
 
 .ambient-field::before {
   background:
-    radial-gradient(ellipse at center, rgba(255, 255, 251, 0.96), transparent 55%),
-    radial-gradient(ellipse at 70% 30%, rgba(177, 203, 195, 0.28), transparent 62%);
+    radial-gradient(ellipse at center, rgba(255, 255, 251, 0.96), transparent 52%),
+    radial-gradient(ellipse at 70% 30%, rgba(165, 199, 188, 0.36), transparent 63%);
   border-radius: 999px;
   content: "";
   height: clamp(260px, 42vw, 520px);
-  opacity: 0.9;
+  opacity: 0.96;
   position: absolute;
   right: min(4vw, 3rem);
   top: clamp(2rem, 9vw, 7rem);
@@ -253,22 +253,22 @@ main {
 }
 
 .ambient-field::after {
-  background: linear-gradient(90deg, transparent, rgba(123, 138, 134, 0.13), transparent);
+  background: linear-gradient(90deg, transparent, rgba(114, 132, 127, 0.16), transparent);
   content: "";
   height: 1px;
   left: 52%;
-  opacity: 0.5;
+  opacity: 0.58;
   position: absolute;
   top: 62%;
   width: min(430px, 42vw);
 }
 
 .ripple {
-  border: 1px solid rgba(117, 130, 126, 0.14);
+  border: 1px solid rgba(111, 129, 124, 0.16);
   border-radius: 50%;
   height: clamp(88px, 14vw, 170px);
   left: 65%;
-  opacity: 0.5;
+  opacity: 0.58;
   position: absolute;
   top: 28%;
   transform: translate3d(var(--drift-x), var(--drift-y), 0) rotate(-3deg);
@@ -276,7 +276,7 @@ main {
 }
 
 .ripple--one {
-  border-color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(209, 224, 218, 0.48);
   height: clamp(72px, 11vw, 130px);
   left: 68%;
   top: 31%;
@@ -284,7 +284,7 @@ main {
 }
 
 .ripple--two {
-  border-color: rgba(194, 211, 204, 0.36);
+  border-color: rgba(185, 207, 199, 0.44);
   height: clamp(110px, 16vw, 190px);
   left: 63%;
   top: 26%;
@@ -292,7 +292,7 @@ main {
 }
 
 .ripple--three {
-  border-color: rgba(137, 151, 146, 0.22);
+  border-color: rgba(128, 149, 143, 0.28);
   border-style: dashed;
   height: clamp(145px, 21vw, 250px);
   left: 59%;
@@ -302,7 +302,7 @@ main {
 }
 
 .ripple--four {
-  border-color: rgba(97, 108, 106, 0.14);
+  border-color: rgba(90, 108, 104, 0.18);
   height: clamp(190px, 28vw, 330px);
   left: 54%;
   opacity: 0.36;
