@@ -239,12 +239,12 @@ main {
 
 .ambient-field::before {
   background:
-    radial-gradient(ellipse at center, rgba(255, 255, 251, 0.92), transparent 56%),
-    radial-gradient(ellipse at 70% 30%, rgba(177, 203, 195, 0.2), transparent 62%);
+    radial-gradient(ellipse at center, rgba(255, 255, 251, 0.96), transparent 55%),
+    radial-gradient(ellipse at 70% 30%, rgba(177, 203, 195, 0.28), transparent 62%);
   border-radius: 999px;
   content: "";
   height: clamp(260px, 42vw, 520px);
-  opacity: 0.76;
+  opacity: 0.9;
   position: absolute;
   right: min(4vw, 3rem);
   top: clamp(2rem, 9vw, 7rem);
@@ -253,11 +253,11 @@ main {
 }
 
 .ambient-field::after {
-  background: linear-gradient(90deg, transparent, rgba(123, 138, 134, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(123, 138, 134, 0.13), transparent);
   content: "";
   height: 1px;
   left: 52%;
-  opacity: 0.42;
+  opacity: 0.5;
   position: absolute;
   top: 62%;
   width: min(430px, 42vw);
@@ -311,25 +311,25 @@ main {
 }
 
 .tiny-boat {
-  height: 54px;
+  height: 46px;
   left: 56%;
-  opacity: 0.5;
+  opacity: 0.46;
   position: absolute;
-  stroke: rgba(74, 82, 81, 0.43);
+  stroke: rgba(74, 82, 81, 0.38);
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 1.2;
-  top: 51%;
+  stroke-width: 0.85;
+  top: 55%;
   transform: translate3d(var(--drift-x), var(--drift-y), 0);
-  width: 128px;
+  width: 108px;
 }
 
 .boat-hull {
-  fill: rgba(62, 70, 69, 0.14);
+  fill: rgba(62, 70, 69, 0.11);
 }
 
 .boat-canopy {
-  fill: rgba(62, 70, 69, 0.1);
+  fill: rgba(62, 70, 69, 0.08);
 }
 
 .boat-roof,
