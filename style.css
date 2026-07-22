@@ -176,15 +176,15 @@ h4 {
 
 .site-nav a.nav-care-link {
   align-items: center;
-  background: rgba(244, 247, 244, 0.82);
-  border: 1px solid rgba(194, 211, 204, 0.58);
+  background: transparent;
+  border: 0;
   color: var(--accent-dark);
   display: inline-flex;
-  height: 2rem;
+  height: 2.25rem;
   justify-content: center;
   padding: 0;
   position: relative;
-  width: 2rem;
+  width: 2.25rem;
 }
 
 .site-nav a[aria-current="page"] {
@@ -194,22 +194,18 @@ h4 {
 }
 
 .site-nav a.nav-care-link[aria-current="page"] {
-  background: rgba(235, 242, 239, 0.92);
-  border-color: rgba(104, 117, 114, 0.28);
+  background: transparent;
+  color: var(--ink);
 }
 
 .nav-care-icon {
   display: block;
-  height: 1.16rem;
+  height: 1.52rem;
   overflow: visible;
-  width: 1.16rem;
+  width: 1.52rem;
 }
 
-.care-heart {
-  fill: currentColor;
-  opacity: 0.88;
-}
-
+.care-heart,
 .care-petal,
 .care-base {
   fill: none;
@@ -219,22 +215,16 @@ h4 {
   stroke-width: 1.35;
 }
 
+.care-heart {
+  opacity: 0.88;
+}
+
 .care-petal {
   opacity: 0.72;
 }
 
 .care-base {
   opacity: 0.62;
-}
-
-.nav-care-link::after {
-  border: 1px solid currentColor;
-  border-radius: 999px;
-  content: "";
-  inset: -0.45rem;
-  opacity: 0;
-  position: absolute;
-  transform: scale(0.72);
 }
 
 .nav-toggle {
@@ -986,7 +976,7 @@ textarea {
   .site-nav a.nav-care-link {
     border-radius: 6px;
     height: auto;
-    justify-content: start;
+    justify-content: center;
     min-height: 44px;
     padding: 0.7rem 0.8rem;
     width: 100%;
@@ -1030,10 +1020,6 @@ textarea {
 
   .nav-care-link.is-blooming .nav-care-icon {
     animation: care-pulse 360ms ease-out;
-  }
-
-  .nav-care-link.is-blooming::after {
-    animation: care-bloom 360ms ease-out;
   }
 
   .ambient-field::before {
@@ -1154,18 +1140,6 @@ textarea {
 
   45% {
     transform: scale(1.12);
-  }
-}
-
-@keyframes care-bloom {
-  0% {
-    opacity: 0.24;
-    transform: scale(0.72);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(1.28);
   }
 }
 
