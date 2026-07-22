@@ -291,14 +291,14 @@ main {
   display: grid;
   min-height: calc(100vh - 72px);
   overflow: visible;
-  padding: clamp(4rem, 9vw, 8rem) 0 clamp(3rem, 7vw, 5rem);
+  padding: clamp(3.25rem, 7.5vw, 6.5rem) 0 clamp(2.5rem, 5.5vw, 4rem);
   position: relative;
 }
 
 .hero__content {
   max-width: 900px;
   position: relative;
-  transform: translateY(clamp(-1.4rem, -3vh, -0.6rem));
+  transform: translateY(clamp(-3rem, -7vh, -1.6rem));
   z-index: 1;
 }
 
