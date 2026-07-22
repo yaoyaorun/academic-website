@@ -9,6 +9,8 @@
   var followForm = document.querySelector("[data-follow-form]");
   var followStatus = document.querySelector("[data-follow-status]");
   var careLinks = document.querySelectorAll(".nav-care-link");
+  var availabilityForm = document.querySelector("[data-availability-form]");
+  var availabilityStatus = document.querySelector("[data-availability-status]");
 
   navLinks.forEach(function (link) {
     if (link.getAttribute("data-nav") === page) {
@@ -96,6 +98,51 @@
       if (followStatus) {
         followStatus.textContent = "Thank you - this placeholder follow interaction is working.";
       }
+    });
+  }
+
+  if (availabilityForm) {
+    availabilityForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      var name = availabilityForm.querySelector("[name='name']").value.trim();
+      var email = availabilityForm.querySelector("[name='email']").value.trim();
+      var route = availabilityForm.querySelector("[name='route']").value;
+      var notes = availabilityForm.querySelector("[name='notes']").value.trim();
+      var availability = Array.prototype.slice.call(availabilityForm.querySelectorAll("[name='availability']:checked"))
+        .map(function (input) {
+          return input.value;
+        });
+
+      if (!name || !email || !route) {
+        if (availabilityStatus) {
+          availabilityStatus.textContent = "Please add your name, email, and interview type.";
+        }
+        return;
+      }
+
+      var bodyLines = [
+        "Dear Yao,",
+        "",
+        "I am interested in: " + route,
+        "Name: " + name,
+        "Email: " + email,
+        "General availability: " + (availability.length ? availability.join(", ") : "Not specified"),
+        "",
+        "Notes:",
+        notes || "None",
+        "",
+        "Best wishes,"
+      ];
+
+      var mailto = "mailto:yxiao3@ic.ac.uk"
+        + "?subject=" + encodeURIComponent("Interview availability - Belonging Across Places")
+        + "&body=" + encodeURIComponent(bodyLines.join("\n"));
+
+      if (availabilityStatus) {
+        availabilityStatus.textContent = "Opening an email draft...";
+      }
+      window.location.href = mailto;
     });
   }
 

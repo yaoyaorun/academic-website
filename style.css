@@ -75,6 +75,7 @@ a:hover {
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
+select:focus-visible,
 textarea:focus-visible,
 summary:focus-visible {
   outline: 3px solid var(--focus);
@@ -666,10 +667,26 @@ main {
   grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.6fr);
 }
 
+.recruitment-spotlight {
+  align-items: start;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1.45fr) minmax(230px, 0.55fr);
+}
+
 .info-panel,
 .qr-panel,
 .follow-panel,
 .feedback-form {
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.language-panel,
+.route-card {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
   padding: clamp(1.25rem, 3vw, 2rem);
 }
 
@@ -702,6 +719,13 @@ main {
   margin: 1rem 0 1.4rem;
 }
 
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.35rem;
+}
+
 .qr-placeholder {
   align-items: center;
   aspect-ratio: 1;
@@ -719,6 +743,121 @@ main {
   margin-top: 1rem;
   min-height: 220px;
   place-items: center;
+}
+
+.qr-panel p {
+  color: var(--muted);
+  margin-top: 0.75rem;
+}
+
+.qr-image-link {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: block;
+  margin-top: 1rem;
+  padding: 0.8rem;
+}
+
+.qr-image {
+  aspect-ratio: 1;
+  display: block;
+  image-rendering: pixelated;
+  width: 100%;
+}
+
+.study-routes {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.study-routes .section__heading {
+  grid-column: 1 / -1;
+}
+
+.route-card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.route-card p,
+.language-panel p,
+.language-panel li {
+  color: var(--muted);
+}
+
+.route-meta {
+  color: var(--accent-dark);
+  font-size: 0.92rem;
+}
+
+.availability-section {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 0.8fr) minmax(280px, 1fr);
+}
+
+.availability-section .section__heading {
+  margin-bottom: 0;
+}
+
+.availability-options {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 1rem;
+}
+
+.availability-options legend {
+  color: var(--ink);
+  font-weight: 400;
+  padding: 0 0.35rem;
+}
+
+.availability-options label {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  gap: 0.55rem;
+  font-weight: 300;
+}
+
+.availability-options input {
+  accent-color: var(--accent-dark);
+  width: auto;
+}
+
+.multilingual-recruitment {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.language-panel {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.language-panel h4 {
+  margin-top: 0.4rem;
+}
+
+.language-panel ul {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.back-to-top,
+.recruitment-version {
+  color: var(--accent-dark);
+  font-size: 0.9rem;
+}
+
+.recruitment-version {
+  border-top: 1px solid var(--line);
+  padding-top: 1.25rem;
 }
 
 .coming-soon {
@@ -753,6 +892,7 @@ label span {
 }
 
 input,
+select,
 textarea {
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid var(--line);
@@ -1019,7 +1159,10 @@ textarea {
     min-height: auto;
   }
 
-  .recruitment-layout {
+  .recruitment-layout,
+  .recruitment-spotlight,
+  .study-routes,
+  .availability-section {
     grid-template-columns: 1fr;
   }
 
