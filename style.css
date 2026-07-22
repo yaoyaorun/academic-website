@@ -845,6 +845,20 @@ main {
   gap: 0.75rem;
 }
 
+.route-card,
+.route-card:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.route-summary .route-card {
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.route-summary .route-card:hover {
+  border-color: rgba(104, 117, 114, 0.28);
+}
+
 .route-card p,
 .language-panel p,
 .language-panel li {
@@ -926,25 +940,6 @@ main {
 .recruitment-version {
   color: var(--accent-dark);
   font-size: 0.9rem;
-}
-
-.eligibility-summary {
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-}
-
-.eligibility-summary summary {
-  color: var(--accent-dark);
-  cursor: pointer;
-  font-weight: 400;
-}
-
-.eligibility-summary ul {
-  display: grid;
-  gap: 0.45rem;
-  margin-top: 0.8rem;
 }
 
 .recruitment-version {
