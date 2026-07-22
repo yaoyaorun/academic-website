@@ -8,6 +8,7 @@
   var forms = document.querySelectorAll("[data-formspree-form]");
   var followForm = document.querySelector("[data-follow-form]");
   var followStatus = document.querySelector("[data-follow-status]");
+  var careLinks = document.querySelectorAll(".nav-care-link");
 
   navLinks.forEach(function (link) {
     if (link.getAttribute("data-nav") === page) {
@@ -25,6 +26,23 @@
       navToggle.setAttribute("aria-expanded", String(isOpen));
     });
   }
+
+  careLinks.forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+        return;
+      }
+
+      event.preventDefault();
+      link.classList.remove("is-blooming");
+      link.offsetWidth;
+      link.classList.add("is-blooming");
+
+      window.setTimeout(function () {
+        window.location.href = link.href;
+      }, 220);
+    });
+  });
 
   function updateAmbient(event) {
     var point = event.touches ? event.touches[0] : event;

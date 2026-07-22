@@ -174,10 +174,67 @@ h4 {
   text-decoration: none;
 }
 
+.site-nav a.nav-care-link {
+  align-items: center;
+  background: rgba(244, 247, 244, 0.82);
+  border: 1px solid rgba(194, 211, 204, 0.58);
+  color: var(--accent-dark);
+  display: inline-flex;
+  height: 2rem;
+  justify-content: center;
+  padding: 0;
+  position: relative;
+  width: 2rem;
+}
+
 .site-nav a[aria-current="page"] {
   background: rgba(238, 247, 244, 0.86);
   color: var(--accent-dark);
   font-weight: 500;
+}
+
+.site-nav a.nav-care-link[aria-current="page"] {
+  background: rgba(235, 242, 239, 0.92);
+  border-color: rgba(104, 117, 114, 0.28);
+}
+
+.nav-care-icon {
+  display: block;
+  height: 1.16rem;
+  overflow: visible;
+  width: 1.16rem;
+}
+
+.care-heart {
+  fill: currentColor;
+  opacity: 0.88;
+}
+
+.care-petal,
+.care-base {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.35;
+}
+
+.care-petal {
+  opacity: 0.72;
+}
+
+.care-base {
+  opacity: 0.62;
+}
+
+.nav-care-link::after {
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  content: "";
+  inset: -0.45rem;
+  opacity: 0;
+  position: absolute;
+  transform: scale(0.72);
 }
 
 .nav-toggle {
@@ -657,6 +714,10 @@ main {
   min-height: 48vh;
 }
 
+.product-note {
+  color: var(--accent-dark);
+}
+
 .form-section {
   max-width: 780px;
 }
@@ -922,6 +983,15 @@ textarea {
     padding: 0.7rem 0.8rem;
   }
 
+  .site-nav a.nav-care-link {
+    border-radius: 6px;
+    height: auto;
+    justify-content: start;
+    min-height: 44px;
+    padding: 0.7rem 0.8rem;
+    width: 100%;
+  }
+
   .hero {
     min-height: auto;
   }
@@ -953,8 +1023,17 @@ textarea {
 
   .button:hover,
   .contact-links a:hover,
-  .blog-card:hover {
+  .blog-card:hover,
+  .nav-care-link:hover {
     transform: translateY(-1px);
+  }
+
+  .nav-care-link.is-blooming .nav-care-icon {
+    animation: care-pulse 360ms ease-out;
+  }
+
+  .nav-care-link.is-blooming::after {
+    animation: care-bloom 360ms ease-out;
   }
 
   .ambient-field::before {
@@ -1064,6 +1143,29 @@ textarea {
   50% {
     opacity: 0.58;
     transform: translate3d(var(--drift-x), var(--drift-y), 0) rotate(-3deg) scale(1.05);
+  }
+}
+
+@keyframes care-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes care-bloom {
+  0% {
+    opacity: 0.24;
+    transform: scale(0.72);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.28);
   }
 }
 
