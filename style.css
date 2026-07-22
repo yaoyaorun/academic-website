@@ -674,6 +674,32 @@ main {
   grid-template-columns: minmax(0, 1.45fr) minmax(230px, 0.55fr);
 }
 
+.route-summary,
+.survey-layout,
+.interview-layout {
+  align-items: start;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.route-summary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 2rem;
+}
+
+.survey-layout {
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
+}
+
+.interview-layout {
+  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+}
+
+.interview-cards {
+  display: grid;
+  gap: 1.25rem;
+}
+
 .info-panel,
 .qr-panel,
 .follow-panel,
@@ -726,6 +752,40 @@ main {
   margin-top: 1.35rem;
 }
 
+.language-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+}
+
+.language-switcher button {
+  background: rgba(255, 255, 255, 0.64);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  min-height: 36px;
+  padding: 0.35rem 0.75rem;
+}
+
+.language-switcher button[aria-pressed="true"] {
+  background: var(--accent-soft);
+  border-color: rgba(104, 117, 114, 0.28);
+  color: var(--accent-dark);
+}
+
+.language-copy {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.language-copy[hidden] {
+  display: none;
+}
+
 .qr-placeholder {
   align-items: center;
   aspect-ratio: 1;
@@ -748,6 +808,10 @@ main {
 .qr-panel p {
   color: var(--muted);
   margin-top: 0.75rem;
+}
+
+.survey-actions .button-row {
+  display: grid;
 }
 
 .qr-image-link {
@@ -796,6 +860,15 @@ main {
   display: grid;
   gap: 1.25rem;
   grid-template-columns: minmax(0, 0.8fr) minmax(280px, 1fr);
+}
+
+.availability-form .section__heading {
+  margin-bottom: 0;
+}
+
+.calendar-grid {
+  display: grid;
+  gap: 0.85rem;
 }
 
 .availability-section .section__heading {
@@ -853,6 +926,25 @@ main {
 .recruitment-version {
   color: var(--accent-dark);
   font-size: 0.9rem;
+}
+
+.eligibility-summary {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+}
+
+.eligibility-summary summary {
+  color: var(--accent-dark);
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.eligibility-summary ul {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.8rem;
 }
 
 .recruitment-version {
@@ -1161,6 +1253,9 @@ textarea {
 
   .recruitment-layout,
   .recruitment-spotlight,
+  .route-summary,
+  .survey-layout,
+  .interview-layout,
   .study-routes,
   .availability-section {
     grid-template-columns: 1fr;

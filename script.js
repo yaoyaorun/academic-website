@@ -11,6 +11,8 @@
   var careLinks = document.querySelectorAll(".nav-care-link");
   var availabilityForm = document.querySelector("[data-availability-form]");
   var availabilityStatus = document.querySelector("[data-availability-status]");
+  var languageButtons = document.querySelectorAll("[data-language-button]");
+  var languagePanels = document.querySelectorAll("[data-language-panel]");
 
   navLinks.forEach(function (link) {
     if (link.getAttribute("data-nav") === page) {
@@ -101,6 +103,36 @@
     });
   }
 
+  function showRecruitmentLanguage(language) {
+    if (!languageButtons.length || !languagePanels.length) {
+      return;
+    }
+
+    languageButtons.forEach(function (button) {
+      var isSelected = button.getAttribute("data-language-button") === language;
+      button.setAttribute("aria-pressed", String(isSelected));
+    });
+
+    languagePanels.forEach(function (panel) {
+      var isSelected = panel.getAttribute("data-language-panel") === language;
+      panel.hidden = !isSelected;
+    });
+  }
+
+  languageButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      var language = button.getAttribute("data-language-button");
+      showRecruitmentLanguage(language);
+      if (history.replaceState) {
+        history.replaceState(null, "", "#recruitment-" + language);
+      }
+    });
+  });
+
+  if (window.location.hash && window.location.hash.indexOf("#recruitment-") === 0) {
+    showRecruitmentLanguage(window.location.hash.replace("#recruitment-", ""));
+  }
+
   if (availabilityForm) {
     availabilityForm.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -109,6 +141,9 @@
       var email = availabilityForm.querySelector("[name='email']").value.trim();
       var route = availabilityForm.querySelector("[name='route']").value;
       var notes = availabilityForm.querySelector("[name='notes']").value.trim();
+      var timeOne = availabilityForm.querySelector("[name='possible_time_1']").value;
+      var timeTwo = availabilityForm.querySelector("[name='possible_time_2']").value;
+      var timeThree = availabilityForm.querySelector("[name='possible_time_3']").value;
       var availability = Array.prototype.slice.call(availabilityForm.querySelectorAll("[name='availability']:checked"))
         .map(function (input) {
           return input.value;
@@ -121,12 +156,44 @@
         return;
       }
 
+      var action = availabilityForm.getAttribute("action") || "";
+      var hasFormspreePlaceholder = action.indexOf("YOUR_AVAILABILITY_FORM_ID") !== -1;
+      var possibleTimes = [timeOne, timeTwo, timeThree].filter(Boolean);
+
+      if (!hasFormspreePlaceholder) {
+        if (availabilityStatus) {
+          availabilityStatus.textContent = "Sending...";
+        }
+
+        fetch(action, {
+          method: "POST",
+          body: new FormData(availabilityForm),
+          headers: { "Accept": "application/json" }
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("Availability submission failed");
+            }
+            availabilityForm.reset();
+            if (availabilityStatus) {
+              availabilityStatus.textContent = "Thanks - your availability has been sent.";
+            }
+          })
+          .catch(function () {
+            if (availabilityStatus) {
+              availabilityStatus.textContent = "Something went wrong. Please email yxiao3@ic.ac.uk directly.";
+            }
+          });
+        return;
+      }
+
       var bodyLines = [
         "Dear Yao,",
         "",
         "I am interested in: " + route,
         "Name: " + name,
         "Email: " + email,
+        "Possible times: " + (possibleTimes.length ? possibleTimes.join(", ") : "Not specified"),
         "General availability: " + (availability.length ? availability.join(", ") : "Not specified"),
         "",
         "Notes:",
@@ -140,7 +207,7 @@
         + "&body=" + encodeURIComponent(bodyLines.join("\n"));
 
       if (availabilityStatus) {
-        availabilityStatus.textContent = "Opening an email draft...";
+        availabilityStatus.textContent = "Opening an email draft. Add a Formspree ID to send directly from the website.";
       }
       window.location.href = mailto;
     });
