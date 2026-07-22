@@ -180,11 +180,12 @@ h4 {
   border: 0;
   color: var(--accent-dark);
   display: inline-flex;
-  height: 2.25rem;
+  height: 2.7rem;
   justify-content: center;
+  margin-top: -0.16rem;
   padding: 0;
   position: relative;
-  width: 2.25rem;
+  width: 2.7rem;
 }
 
 .site-nav a[aria-current="page"] {
@@ -195,14 +196,14 @@ h4 {
 
 .site-nav a.nav-care-link[aria-current="page"] {
   background: transparent;
-  color: var(--ink);
+  color: #5f7f76;
 }
 
 .nav-care-icon {
   display: block;
-  height: 1.52rem;
+  height: 2rem;
   overflow: visible;
-  width: 1.52rem;
+  width: 2rem;
 }
 
 .care-heart,
@@ -212,19 +213,35 @@ h4 {
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 1.35;
+  stroke-width: 1.42;
 }
 
 .care-heart {
-  opacity: 0.88;
+  opacity: 0.94;
+  stroke-width: 1.62;
 }
 
 .care-petal {
-  opacity: 0.72;
+  opacity: 0.68;
+}
+
+.care-petal--center {
+  opacity: 0.5;
 }
 
 .care-base {
   opacity: 0.62;
+}
+
+.nav-care-link::after {
+  background: radial-gradient(circle, rgba(194, 211, 204, 0.34) 0%, rgba(194, 211, 204, 0.16) 38%, transparent 68%);
+  border-radius: 999px;
+  content: "";
+  inset: -0.55rem;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transform: scale(0.62);
 }
 
 .nav-toggle {
@@ -977,6 +994,7 @@ textarea {
     border-radius: 6px;
     height: auto;
     justify-content: center;
+    margin-top: 0;
     min-height: 44px;
     padding: 0.7rem 0.8rem;
     width: 100%;
@@ -1018,8 +1036,17 @@ textarea {
     transform: translateY(-1px);
   }
 
+  .nav-care-link:hover,
+  .nav-care-link.is-blooming {
+    color: #6f9688;
+  }
+
   .nav-care-link.is-blooming .nav-care-icon {
-    animation: care-pulse 360ms ease-out;
+    animation: care-pulse 520ms ease-out;
+  }
+
+  .nav-care-link.is-blooming::after {
+    animation: care-bloom 520ms ease-out;
   }
 
   .ambient-field::before {
@@ -1139,7 +1166,24 @@ textarea {
   }
 
   45% {
-    transform: scale(1.12);
+    transform: scale(1.16);
+  }
+}
+
+@keyframes care-bloom {
+  0% {
+    opacity: 0.42;
+    transform: scale(0.58);
+  }
+
+  58% {
+    opacity: 0.22;
+    transform: scale(1.18);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.62);
   }
 }
 
