@@ -139,21 +139,23 @@
     var availabilityDuration = availabilityForm.querySelector("[data-availability-duration]");
     var slotOptions = availabilityForm.querySelector("[data-slot-options]");
     var slotHelper = availabilityForm.querySelector("[data-slot-helper]");
+    var slotDuration = availabilityForm.querySelector("[data-slot-duration]");
+    var selectedSlotsSummary = availabilityForm.querySelector("[data-selected-slots-summary]");
     var slotSets = {
       "Participant interview": {
         duration: "60 min",
-        helper: "Around 45 minutes, up to 60 minutes.",
-        slots: ["09:00-10:30", "12:30-14:00", "16:00-17:30", "19:30-21:00"]
+        helper: "Interview is around 45 min, up to 60 min. Select one or more 60-minute slots.",
+        slots: ["09:00-10:00", "11:00-12:00", "14:00-15:00", "16:30-17:30", "20:00-21:00"]
       },
       "Expert interview": {
         duration: "90 min",
-        helper: "Around 60 minutes, up to 90 minutes.",
-        slots: ["09:00-11:30", "13:00-15:30", "16:30-19:00", "19:30-22:00"]
+        helper: "Interview is around 60 min, up to 90 min. Select one or more 90-minute slots.",
+        slots: ["09:00-10:30", "11:30-13:00", "14:30-16:00", "17:00-18:30", "20:00-21:30"]
       },
       "Project collaboration / coffee chat": {
         duration: "20 min",
-        helper: "A short project conversation or collaboration query.",
-        slots: ["09:30-10:30", "12:00-13:00", "15:00-16:00", "19:00-20:00"]
+        helper: "A short project conversation. Select one or more 20-minute slots.",
+        slots: ["09:00-09:20", "10:40-11:00", "13:00-13:20", "15:30-15:50", "19:40-20:00"]
       }
     };
 
@@ -185,10 +187,13 @@
       if (availabilityDuration) {
         availabilityDuration.value = slotSet ? slotSet.duration : "";
       }
+      if (slotDuration) {
+        slotDuration.textContent = slotSet ? "(" + slotSet.duration + " slots, UK time)" : "";
+      }
 
       if (!slotSet || !selectedDate) {
         if (slotHelper) {
-          slotHelper.textContent = "Choose a conversation type and date.";
+          slotHelper.textContent = "Choose a conversation type and date. You may select more than one.";
         }
         return;
       }
@@ -197,22 +202,18 @@
         slotHelper.textContent = slotSet.helper + " " + formatSelectedDate(selectedDate) + ", UK time.";
       }
 
-      slotSet.slots.forEach(function (slot, index) {
+      slotSet.slots.forEach(function (slot) {
         var label = document.createElement("label");
         var input = document.createElement("input");
         var main = document.createElement("span");
         var meta = document.createElement("small");
 
         label.className = "slot-option";
-        input.type = "radio";
-        input.name = "preferred_time_slot";
+        input.type = "checkbox";
+        input.name = "preferred_time_slots";
         input.value = slot;
-        input.required = true;
-        if (index === 0) {
-          input.checked = true;
-        }
         main.textContent = slot;
-        meta.textContent = selectedRoute + " · " + slotSet.duration + " · UK time";
+        meta.textContent = slotSet.duration + " · UK time";
 
         label.appendChild(input);
         label.appendChild(main);
@@ -236,13 +237,17 @@
       var name = availabilityForm.querySelector("[name='name']").value.trim();
       var email = availabilityForm.querySelector("[name='email']").value.trim();
       var route = availabilityForm.querySelector("[name='route']").value;
+      var meetingMode = availabilityForm.querySelector("[name='meeting_mode']").value;
       var notes = availabilityForm.querySelector("[name='notes']").value.trim();
       var preferredDate = availabilityDate ? availabilityDate.value : "";
-      var selectedSlot = availabilityForm.querySelector("[name='preferred_time_slot']:checked");
+      var selectedSlots = Array.prototype.slice.call(availabilityForm.querySelectorAll("[name='preferred_time_slots']:checked"))
+        .map(function (input) {
+          return input.value;
+        });
 
-      if (!name || !email || !route || !preferredDate || !selectedSlot) {
+      if (!name || !email || !route || !meetingMode || !preferredDate || !selectedSlots.length) {
         if (availabilityStatus) {
-          availabilityStatus.textContent = "Please add your name, email, conversation type, date, and time window.";
+          availabilityStatus.textContent = "Please add your name, email, conversation type, meeting format, date, and at least one time slot.";
         }
         return;
       }
@@ -250,6 +255,9 @@
       var action = availabilityForm.getAttribute("action") || "";
       var hasFormspreePlaceholder = action.indexOf("YOUR_AVAILABILITY_FORM_ID") !== -1;
       var duration = availabilityDuration ? availabilityDuration.value : "";
+      if (selectedSlotsSummary) {
+        selectedSlotsSummary.value = selectedSlots.join(", ") + " UK time";
+      }
 
       if (!hasFormspreePlaceholder) {
         if (availabilityStatus) {
@@ -273,7 +281,7 @@
               availabilityForm.classList.remove("is-sent");
             }, 1200);
             if (availabilityStatus) {
-              availabilityStatus.textContent = "Thanks - your preferred time window has been sent.";
+              availabilityStatus.textContent = "Thanks - your preferred time slots have been sent.";
             }
           })
           .catch(function () {
@@ -290,8 +298,9 @@
         "I am interested in: " + route,
         "Name: " + name,
         "Email: " + email,
+        "Meeting format: " + meetingMode,
         "Preferred date: " + preferredDate,
-        "Preferred time window: " + selectedSlot.value + " UK time",
+        "Preferred time slots: " + selectedSlots.join(", ") + " UK time",
         "Duration: " + (duration || "Not specified"),
         "",
         "Notes:",

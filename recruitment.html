@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter:wght@200;300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260724-1">
+  <link rel="stylesheet" href="style.css?v=20260724-2">
 </head>
 <body data-page="recruitment">
   <header class="site-header">
@@ -58,12 +58,12 @@
         </a>
         <a class="route-card" href="#migrant-interview">
           <p class="eyebrow">Interview</p>
-          <h3>Around 45 min</h3>
+          <h3>Around 45 min, up to 60 min</h3>
           <p>Optional one-to-one migrant interview about migration, belonging, support, digital tools, and AI.</p>
         </a>
         <a class="route-card" href="#expert-interview">
           <p class="eyebrow">Expert Interview</p>
-          <h3>Around 60 min</h3>
+          <h3>Around 60 min, up to 90 min</h3>
           <p>Professional perspectives on cross-cultural support, migration, AI roles, boundaries, and future digital support.</p>
         </a>
       </div>
@@ -257,13 +257,22 @@
             <label for="availability-route">I am interested in</label>
             <select id="availability-route" name="route" data-availability-route required>
               <option value="">Select a conversation type</option>
-              <option value="Participant interview">Participant interview (60 min)</option>
-              <option value="Expert interview">Expert interview (90 min)</option>
+              <option value="Participant interview">Participant interview (around 45 min, up to 60 min)</option>
+              <option value="Expert interview">Expert interview (around 60 min, up to 90 min)</option>
               <option value="Project collaboration / coffee chat">Project collaboration / coffee chat (20 min)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="availability-mode">How would you like to participate?</label>
+            <select id="availability-mode" name="meeting_mode" required>
+              <option value="">Select a format</option>
+              <option>Online</option>
+              <option>In person at Imperial College London</option>
             </select>
           </div>
           <input type="hidden" name="duration" data-availability-duration>
           <input type="hidden" name="timezone" value="UK time">
+          <input type="hidden" name="preferred_time_slots_summary" data-selected-slots-summary>
           <div class="scheduler-picker">
             <div class="form-row">
               <label for="availability-date">Preferred date</label>
@@ -271,10 +280,10 @@
             </div>
             <div class="slot-panel">
               <div class="slot-panel__header">
-                <span>Time window</span>
-                <small data-slot-helper>Choose a conversation type and date.</small>
+                <span>Time slots <em data-slot-duration></em></span>
+                <small data-slot-helper>Choose a conversation type and date. You may select more than one.</small>
               </div>
-              <div class="slot-grid" data-slot-options role="radiogroup" aria-label="Suggested time windows"></div>
+              <div class="slot-grid" data-slot-options role="group" aria-label="Suggested time slots"></div>
             </div>
           </div>
           <div class="form-row">
@@ -298,6 +307,6 @@
     <p>&copy; <span data-year></span> Belonging Across Places.</p>
   </footer>
 
-  <script src="script.js?v=20260724-1"></script>
+  <script src="script.js?v=20260724-2"></script>
 </body>
 </html>

@@ -693,7 +693,7 @@ main {
 }
 
 .interview-layout {
-  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.72fr);
 }
 
 .interview-cards {
@@ -881,6 +881,13 @@ main {
   margin-bottom: 0;
 }
 
+.availability-form {
+  align-self: start;
+  margin-left: auto;
+  max-width: 430px;
+  width: 100%;
+}
+
 .calendar-grid {
   display: grid;
   gap: 0.85rem;
@@ -890,7 +897,7 @@ main {
   align-items: start;
   display: grid;
   gap: 1rem;
-  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  grid-template-columns: 1fr;
 }
 
 .slot-panel {
@@ -901,10 +908,9 @@ main {
 }
 
 .slot-panel__header {
-  align-items: baseline;
-  display: flex;
+  align-items: start;
+  display: grid;
   gap: 0.55rem;
-  justify-content: space-between;
   margin-bottom: 0.75rem;
 }
 
@@ -916,13 +922,22 @@ main {
 .slot-panel__header small {
   color: var(--muted);
   font-size: 0.78rem;
-  text-align: right;
+  text-align: left;
+}
+
+.slot-panel__header em {
+  color: var(--accent-dark);
+  display: block;
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 360;
+  margin-top: 0.15rem;
 }
 
 .slot-grid {
   display: grid;
   gap: 0.55rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .slot-option {
@@ -931,10 +946,21 @@ main {
   cursor: pointer;
   display: grid;
   gap: 0.15rem;
-  min-height: 64px;
+  min-height: 54px;
   padding: 0.65rem 0.75rem;
   position: relative;
   transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.slot-option::before {
+  border: 1px solid rgba(104, 117, 114, 0.38);
+  border-radius: 4px;
+  content: "";
+  height: 14px;
+  position: absolute;
+  right: 0.7rem;
+  top: 0.7rem;
+  width: 14px;
 }
 
 .slot-option:hover {
@@ -967,6 +993,11 @@ main {
 .slot-option:has(input:checked) {
   background: rgba(204, 223, 216, 0.42);
   border-color: rgba(104, 117, 114, 0.52);
+}
+
+.slot-option:has(input:checked)::before {
+  background: var(--accent-dark);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.86);
 }
 
 .availability-form {
