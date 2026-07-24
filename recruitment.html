@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter:wght@200;300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260724-4">
+  <link rel="stylesheet" href="style.css?v=20260724-5">
 </head>
 <body data-page="recruitment">
   <header class="site-header">
@@ -245,55 +245,59 @@
             <h3>Choose Possible Times</h3>
             <p>Choose one or more possible times. Your availability will be sent directly to Yao by email.</p>
           </div>
-          <div class="form-row">
-            <label for="availability-name">Name</label>
-            <input id="availability-name" name="name" type="text" autocomplete="name" required>
-          </div>
-          <div class="form-row">
-            <label for="availability-email">Email</label>
-            <input id="availability-email" name="email" type="email" autocomplete="email" required>
-          </div>
-          <div class="form-row">
-            <label for="availability-route">I am interested in</label>
-            <select id="availability-route" name="route" data-availability-route required>
-              <option value="">Select a conversation type</option>
-              <option value="Participant interview">Participant interview (around 45 min, up to 60 min)</option>
-              <option value="Expert interview">Expert interview (around 60 min, up to 90 min)</option>
-              <option value="Project collaboration / coffee chat">Project collaboration / coffee chat (20 min)</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="availability-mode">How would you like to participate?</label>
-            <select id="availability-mode" name="meeting_mode" required>
-              <option value="">Select a format</option>
-              <option>Online via Microsoft Teams</option>
-              <option>In person at Imperial College London</option>
-            </select>
+          <div class="availability-fields">
+            <div class="form-row">
+              <label for="availability-name">Name</label>
+              <input id="availability-name" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="form-row">
+              <label for="availability-email">Email</label>
+              <input id="availability-email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="form-row">
+              <label for="availability-route">I am interested in</label>
+              <select id="availability-route" name="route" data-availability-route required>
+                <option value="">Select a conversation type</option>
+                <option value="Participant interview">Participant interview (around 45 min, up to 60 min)</option>
+                <option value="Expert interview">Expert interview (around 60 min, up to 90 min)</option>
+                <option value="Project collaboration / coffee chat">Project collaboration / coffee chat (20 min)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="availability-mode">How would you like to participate?</label>
+              <select id="availability-mode" name="meeting_mode" required>
+                <option value="">Select a format</option>
+                <option>Online via Microsoft Teams</option>
+                <option>In person at Imperial College London</option>
+              </select>
+            </div>
           </div>
           <input type="hidden" name="duration" data-availability-duration>
           <input type="hidden" name="timezone" value="UK time">
           <input type="hidden" name="preferred_dates_summary" data-selected-dates-summary>
           <input type="hidden" name="preferred_time_slots_summary" data-selected-slots-summary>
-          <fieldset class="availability-options">
-            <legend>When are you generally available?</legend>
-            <label><input type="checkbox" name="general_availability" value="Weekday mornings" data-availability-window="weekday-morning"> Weekday mornings</label>
-            <label><input type="checkbox" name="general_availability" value="Weekday afternoons" data-availability-window="weekday-afternoon"> Weekday afternoons</label>
-            <label><input type="checkbox" name="general_availability" value="Weekday evenings" data-availability-window="weekday-evening"> Weekday evenings</label>
-            <label><input type="checkbox" name="general_availability" value="Weekends" data-availability-window="weekend"> Weekends</label>
-          </fieldset>
-          <div class="scheduler-picker">
-            <div class="form-row">
-              <label for="availability-date">Possible dates</label>
-              <div class="date-add-row">
-                <input id="availability-date" name="preferred_date" type="date" data-availability-date>
-                <button class="button button--ghost" type="button" data-add-date>Add date</button>
+          <div class="availability-main">
+            <div class="availability-controls">
+              <fieldset class="availability-options">
+                <legend>When are you generally available?</legend>
+                <label><input type="checkbox" name="general_availability" value="Weekday mornings" data-availability-window="weekday-morning"> Weekday mornings</label>
+                <label><input type="checkbox" name="general_availability" value="Weekday afternoons" data-availability-window="weekday-afternoon"> Weekday afternoons</label>
+                <label><input type="checkbox" name="general_availability" value="Weekday evenings" data-availability-window="weekday-evening"> Weekday evenings</label>
+                <label><input type="checkbox" name="general_availability" value="Weekends" data-availability-window="weekend"> Weekends</label>
+              </fieldset>
+              <div class="form-row">
+                <label for="availability-date">Possible dates</label>
+                <div class="date-add-row">
+                  <input id="availability-date" name="preferred_date" type="date" data-availability-date>
+                  <button class="button button--ghost" type="button" data-add-date>Add date</button>
+                </div>
+                <div class="selected-dates" data-selected-dates aria-live="polite"></div>
+                <div class="date-picker-tools">
+                  <label><input type="checkbox" data-range-mode> Select a date range</label>
+                  <small>Click several dates, or turn on range mode and choose a start and end date.</small>
+                </div>
+                <div class="quick-date-grid" data-quick-date-grid aria-label="Quick date picker"></div>
               </div>
-              <div class="selected-dates" data-selected-dates aria-live="polite"></div>
-              <div class="date-picker-tools">
-                <label><input type="checkbox" data-range-mode> Select a date range</label>
-                <small>Click several dates, or turn on range mode and choose a start and end date.</small>
-              </div>
-              <div class="quick-date-grid" data-quick-date-grid aria-label="Quick date picker"></div>
             </div>
             <div class="slot-panel">
               <div class="slot-panel__header">
@@ -325,6 +329,6 @@
     <p>&copy; <span data-year></span> Belonging Across Places.</p>
   </footer>
 
-  <script src="script.js?v=20260724-4"></script>
+  <script src="script.js?v=20260724-5"></script>
 </body>
 </html>
