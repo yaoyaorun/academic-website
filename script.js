@@ -136,26 +136,45 @@
   if (availabilityForm) {
     var availabilityRoute = availabilityForm.querySelector("[data-availability-route]");
     var availabilityDate = availabilityForm.querySelector("[data-availability-date]");
+    var addDateButton = availabilityForm.querySelector("[data-add-date]");
+    var selectedDatesNode = availabilityForm.querySelector("[data-selected-dates]");
     var availabilityDuration = availabilityForm.querySelector("[data-availability-duration]");
     var slotOptions = availabilityForm.querySelector("[data-slot-options]");
     var slotHelper = availabilityForm.querySelector("[data-slot-helper]");
     var slotDuration = availabilityForm.querySelector("[data-slot-duration]");
+    var selectedDatesSummary = availabilityForm.querySelector("[data-selected-dates-summary]");
     var selectedSlotsSummary = availabilityForm.querySelector("[data-selected-slots-summary]");
+    var selectedDates = [];
     var slotSets = {
       "Participant interview": {
         duration: "60 min",
         helper: "Interview is around 45 min, up to 60 min. Select one or more 60-minute slots.",
-        slots: ["09:00-10:00", "11:00-12:00", "14:00-15:00", "16:30-17:30", "20:00-21:00"]
+        slots: {
+          "weekday-morning": ["10:00-11:00", "11:00-12:00"],
+          "weekday-afternoon": ["12:00-13:00", "13:00-14:00", "14:00-15:00", "15:00-16:00"],
+          "weekday-evening": ["18:00-19:00", "19:00-20:00", "20:00-21:00", "21:00-22:00"],
+          "weekend": ["10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00", "19:00-20:00"]
+        }
       },
       "Expert interview": {
         duration: "90 min",
         helper: "Interview is around 60 min, up to 90 min. Select one or more 90-minute slots.",
-        slots: ["09:00-10:30", "11:30-13:00", "14:30-16:00", "17:00-18:30", "20:00-21:30"]
+        slots: {
+          "weekday-morning": ["09:00-10:30", "10:30-12:00"],
+          "weekday-afternoon": ["12:00-13:30", "13:30-15:00", "15:00-16:30"],
+          "weekday-evening": ["18:00-19:30", "19:30-21:00"],
+          "weekend": ["10:00-11:30", "11:30-13:00", "14:00-15:30", "15:30-17:00"]
+        }
       },
       "Project collaboration / coffee chat": {
         duration: "20 min",
         helper: "A short project conversation. Select one or more 20-minute slots.",
-        slots: ["09:00-09:20", "10:40-11:00", "13:00-13:20", "15:30-15:50", "19:40-20:00"]
+        slots: {
+          "weekday-morning": ["10:00-10:20", "10:20-10:40", "10:40-11:00", "11:00-11:20"],
+          "weekday-afternoon": ["12:00-12:20", "12:20-12:40", "14:00-14:20", "14:20-14:40", "15:00-15:20"],
+          "weekday-evening": ["18:00-18:20", "18:20-18:40", "19:00-19:20", "19:20-19:40", "20:00-20:20"],
+          "weekend": ["10:00-10:20", "10:20-10:40", "11:00-11:20", "14:00-14:20", "14:20-14:40", "16:00-16:20"]
+        }
       }
     };
 
@@ -174,13 +193,81 @@
       });
     }
 
+    function isWeekend(value) {
+      var date = new Date(value + "T12:00:00");
+      var day = date.getDay();
+      return day === 0 || day === 6;
+    }
+
+    function selectedAvailabilityWindows() {
+      return Array.prototype.slice.call(availabilityForm.querySelectorAll("[data-availability-window]:checked"))
+        .map(function (input) {
+          return input.getAttribute("data-availability-window");
+        });
+    }
+
+    function syncDateSummary() {
+      if (selectedDatesSummary) {
+        selectedDatesSummary.value = selectedDates.map(formatSelectedDate).join(", ");
+      }
+    }
+
+    function renderSelectedDates() {
+      if (!selectedDatesNode) {
+        return;
+      }
+
+      selectedDatesNode.innerHTML = "";
+      selectedDates.forEach(function (dateValue) {
+        var chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "date-chip";
+        chip.setAttribute("data-date", dateValue);
+        chip.textContent = formatSelectedDate(dateValue) + " ×";
+        chip.addEventListener("click", function () {
+          selectedDates = selectedDates.filter(function (value) {
+            return value !== dateValue;
+          });
+          renderSelectedDates();
+          renderAvailabilitySlots();
+        });
+        selectedDatesNode.appendChild(chip);
+      });
+      syncDateSummary();
+    }
+
+    function addSelectedDate() {
+      if (!availabilityDate || !availabilityDate.value) {
+        return;
+      }
+
+      if (selectedDates.indexOf(availabilityDate.value) === -1) {
+        selectedDates.push(availabilityDate.value);
+        selectedDates.sort();
+      }
+      availabilityDate.value = "";
+      renderSelectedDates();
+      renderAvailabilitySlots();
+    }
+
+    function slotsForDate(slotSet, dateValue, windows) {
+      var weekendDate = isWeekend(dateValue);
+      var usableWindows = windows.filter(function (windowName) {
+        return weekendDate ? windowName === "weekend" : windowName !== "weekend";
+      });
+
+      return usableWindows.reduce(function (slots, windowName) {
+        return slots.concat(slotSet.slots[windowName] || []);
+      }, []);
+    }
+
     function renderAvailabilitySlots() {
       if (!availabilityRoute || !availabilityDate || !slotOptions) {
         return;
       }
 
       var selectedRoute = availabilityRoute.value;
-      var selectedDate = availabilityDate.value;
+      var windows = selectedAvailabilityWindows();
       var slotSet = slotSets[selectedRoute];
       slotOptions.innerHTML = "";
 
@@ -191,34 +278,55 @@
         slotDuration.textContent = slotSet ? "(" + slotSet.duration + " slots, UK time)" : "";
       }
 
-      if (!slotSet || !selectedDate) {
+      if (!slotSet || !selectedDates.length || !windows.length) {
         if (slotHelper) {
-          slotHelper.textContent = "Choose a conversation type and date. You may select more than one.";
+          slotHelper.textContent = "Choose a conversation type, general availability, and one or more dates. You may select slots across days.";
         }
         return;
       }
 
       if (slotHelper) {
-        slotHelper.textContent = slotSet.helper + " " + formatSelectedDate(selectedDate) + ", UK time.";
+        slotHelper.textContent = slotSet.helper + " All times are UK time.";
       }
 
-      slotSet.slots.forEach(function (slot) {
-        var label = document.createElement("label");
-        var input = document.createElement("input");
-        var main = document.createElement("span");
-        var meta = document.createElement("small");
+      selectedDates.forEach(function (dateValue) {
+        var slots = slotsForDate(slotSet, dateValue, windows);
+        var dayGroup = document.createElement("div");
+        var heading = document.createElement("h4");
 
-        label.className = "slot-option";
-        input.type = "checkbox";
-        input.name = "preferred_time_slots";
-        input.value = slot;
-        main.textContent = slot;
-        meta.textContent = slotSet.duration + " · UK time";
+        dayGroup.className = "slot-day";
+        heading.textContent = formatSelectedDate(dateValue);
+        dayGroup.appendChild(heading);
 
-        label.appendChild(input);
-        label.appendChild(main);
-        label.appendChild(meta);
-        slotOptions.appendChild(label);
+        if (!slots.length) {
+          var empty = document.createElement("p");
+          empty.className = "slot-empty";
+          empty.textContent = isWeekend(dateValue)
+            ? "Select Weekends to see slots for this date."
+            : "Select a weekday morning, afternoon, or evening to see slots for this date.";
+          dayGroup.appendChild(empty);
+        }
+
+        slots.forEach(function (slot) {
+          var label = document.createElement("label");
+          var input = document.createElement("input");
+          var main = document.createElement("span");
+          var meta = document.createElement("small");
+
+          label.className = "slot-option";
+          input.type = "checkbox";
+          input.name = "preferred_time_slots";
+          input.value = formatSelectedDate(dateValue) + ": " + slot;
+          main.textContent = slot;
+          meta.textContent = slotSet.duration + " · UK time";
+
+          label.appendChild(input);
+          label.appendChild(main);
+          label.appendChild(meta);
+          dayGroup.appendChild(label);
+        });
+
+        slotOptions.appendChild(dayGroup);
       });
     }
 
@@ -227,8 +335,15 @@
     }
     if (availabilityDate) {
       availabilityDate.min = new Date().toISOString().slice(0, 10);
-      availabilityDate.addEventListener("change", renderAvailabilitySlots);
+      availabilityDate.addEventListener("change", addSelectedDate);
     }
+    if (addDateButton) {
+      addDateButton.addEventListener("click", addSelectedDate);
+    }
+    availabilityForm.querySelectorAll("[data-availability-window]").forEach(function (input) {
+      input.addEventListener("change", renderAvailabilitySlots);
+    });
+    renderSelectedDates();
     renderAvailabilitySlots();
 
     availabilityForm.addEventListener("submit", function (event) {
@@ -239,15 +354,25 @@
       var route = availabilityForm.querySelector("[name='route']").value;
       var meetingMode = availabilityForm.querySelector("[name='meeting_mode']").value;
       var notes = availabilityForm.querySelector("[name='notes']").value.trim();
-      var preferredDate = availabilityDate ? availabilityDate.value : "";
+      var generalAvailability = Array.prototype.slice.call(availabilityForm.querySelectorAll("[name='general_availability']:checked"))
+        .map(function (input) {
+          return input.value;
+        });
       var selectedSlots = Array.prototype.slice.call(availabilityForm.querySelectorAll("[name='preferred_time_slots']:checked"))
         .map(function (input) {
           return input.value;
         });
 
-      if (!name || !email || !route || !meetingMode || !preferredDate || !selectedSlots.length) {
+      if (!name || !email || !route || !meetingMode) {
         if (availabilityStatus) {
-          availabilityStatus.textContent = "Please add your name, email, conversation type, meeting format, date, and at least one time slot.";
+          availabilityStatus.textContent = "Please add your name, email, conversation type, and meeting format.";
+        }
+        return;
+      }
+
+      if (!selectedSlots.length && !notes) {
+        if (availabilityStatus) {
+          availabilityStatus.textContent = "Please select at least one slot, or add a note if your timing is uncertain.";
         }
         return;
       }
@@ -255,8 +380,9 @@
       var action = availabilityForm.getAttribute("action") || "";
       var hasFormspreePlaceholder = action.indexOf("YOUR_AVAILABILITY_FORM_ID") !== -1;
       var duration = availabilityDuration ? availabilityDuration.value : "";
+      syncDateSummary();
       if (selectedSlotsSummary) {
-        selectedSlotsSummary.value = selectedSlots.join(", ") + " UK time";
+        selectedSlotsSummary.value = selectedSlots.length ? selectedSlots.join("; ") + " UK time" : "No slot selected";
       }
 
       if (!hasFormspreePlaceholder) {
@@ -275,6 +401,8 @@
               throw new Error("Availability submission failed");
             }
             availabilityForm.reset();
+            selectedDates = [];
+            renderSelectedDates();
             renderAvailabilitySlots();
             availabilityForm.classList.add("is-sent");
             window.setTimeout(function () {
@@ -299,8 +427,9 @@
         "Name: " + name,
         "Email: " + email,
         "Meeting format: " + meetingMode,
-        "Preferred date: " + preferredDate,
-        "Preferred time slots: " + selectedSlots.join(", ") + " UK time",
+        "General availability: " + (generalAvailability.length ? generalAvailability.join(", ") : "Not specified"),
+        "Preferred dates: " + (selectedDates.length ? selectedDates.map(formatSelectedDate).join(", ") : "Not specified"),
+        "Preferred time slots: " + (selectedSlots.length ? selectedSlots.join("; ") + " UK time" : "No slot selected"),
         "Duration: " + (duration || "Not specified"),
         "",
         "Notes:",

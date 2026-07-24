@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter:wght@200;300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260724-2">
+  <link rel="stylesheet" href="style.css?v=20260724-3">
 </head>
 <body data-page="recruitment">
   <header class="site-header">
@@ -266,26 +266,39 @@
             <label for="availability-mode">How would you like to participate?</label>
             <select id="availability-mode" name="meeting_mode" required>
               <option value="">Select a format</option>
-              <option>Online</option>
+              <option>Online via Microsoft Teams</option>
               <option>In person at Imperial College London</option>
             </select>
           </div>
           <input type="hidden" name="duration" data-availability-duration>
           <input type="hidden" name="timezone" value="UK time">
+          <input type="hidden" name="preferred_dates_summary" data-selected-dates-summary>
           <input type="hidden" name="preferred_time_slots_summary" data-selected-slots-summary>
+          <fieldset class="availability-options">
+            <legend>When are you generally available?</legend>
+            <label><input type="checkbox" name="general_availability" value="Weekday mornings" data-availability-window="weekday-morning"> Weekday mornings</label>
+            <label><input type="checkbox" name="general_availability" value="Weekday afternoons" data-availability-window="weekday-afternoon"> Weekday afternoons</label>
+            <label><input type="checkbox" name="general_availability" value="Weekday evenings" data-availability-window="weekday-evening"> Weekday evenings</label>
+            <label><input type="checkbox" name="general_availability" value="Weekends" data-availability-window="weekend"> Weekends</label>
+          </fieldset>
           <div class="scheduler-picker">
             <div class="form-row">
-              <label for="availability-date">Preferred date</label>
-              <input id="availability-date" name="preferred_date" type="date" data-availability-date required>
+              <label for="availability-date">Possible dates</label>
+              <div class="date-add-row">
+                <input id="availability-date" name="preferred_date" type="date" data-availability-date>
+                <button class="button button--ghost" type="button" data-add-date>Add date</button>
+              </div>
+              <div class="selected-dates" data-selected-dates aria-live="polite"></div>
             </div>
             <div class="slot-panel">
               <div class="slot-panel__header">
                 <span>Time slots <em data-slot-duration></em></span>
-                <small data-slot-helper>Choose a conversation type and date. You may select more than one.</small>
+                <small data-slot-helper>Choose a type, general availability, and one or more dates. You may select slots across days.</small>
               </div>
               <div class="slot-grid" data-slot-options role="group" aria-label="Suggested time slots"></div>
             </div>
           </div>
+          <p class="availability-note">If your schedule is uncertain, that is okay. Add a note below, or email <a href="mailto:yxiao3@ic.ac.uk">yxiao3@ic.ac.uk</a> first.</p>
           <div class="form-row">
             <label for="availability-notes">Notes <span>(optional)</span></label>
             <textarea id="availability-notes" name="notes" rows="5" placeholder="You can include timezone, access needs, or questions."></textarea>
@@ -307,6 +320,6 @@
     <p>&copy; <span data-year></span> Belonging Across Places.</p>
   </footer>
 
-  <script src="script.js?v=20260724-2"></script>
+  <script src="script.js?v=20260724-3"></script>
 </body>
 </html>
