@@ -134,6 +134,102 @@
   }
 
   if (availabilityForm) {
+    var availabilityRoute = availabilityForm.querySelector("[data-availability-route]");
+    var availabilityDate = availabilityForm.querySelector("[data-availability-date]");
+    var availabilityDuration = availabilityForm.querySelector("[data-availability-duration]");
+    var slotOptions = availabilityForm.querySelector("[data-slot-options]");
+    var slotHelper = availabilityForm.querySelector("[data-slot-helper]");
+    var slotSets = {
+      "Participant interview": {
+        duration: "60 min",
+        helper: "Around 45 minutes, up to 60 minutes.",
+        slots: ["09:00-10:30", "12:30-14:00", "16:00-17:30", "19:30-21:00"]
+      },
+      "Expert interview": {
+        duration: "90 min",
+        helper: "Around 60 minutes, up to 90 minutes.",
+        slots: ["09:00-11:30", "13:00-15:30", "16:30-19:00", "19:30-22:00"]
+      },
+      "Project collaboration / coffee chat": {
+        duration: "20 min",
+        helper: "A short project conversation or collaboration query.",
+        slots: ["09:30-10:30", "12:00-13:00", "15:00-16:00", "19:00-20:00"]
+      }
+    };
+
+    function formatSelectedDate(value) {
+      if (!value) {
+        return "";
+      }
+      var date = new Date(value + "T12:00:00");
+      if (Number.isNaN(date.getTime())) {
+        return value;
+      }
+      return date.toLocaleDateString("en-GB", {
+        weekday: "short",
+        day: "numeric",
+        month: "short"
+      });
+    }
+
+    function renderAvailabilitySlots() {
+      if (!availabilityRoute || !availabilityDate || !slotOptions) {
+        return;
+      }
+
+      var selectedRoute = availabilityRoute.value;
+      var selectedDate = availabilityDate.value;
+      var slotSet = slotSets[selectedRoute];
+      slotOptions.innerHTML = "";
+
+      if (availabilityDuration) {
+        availabilityDuration.value = slotSet ? slotSet.duration : "";
+      }
+
+      if (!slotSet || !selectedDate) {
+        if (slotHelper) {
+          slotHelper.textContent = "Choose a conversation type and date.";
+        }
+        return;
+      }
+
+      if (slotHelper) {
+        slotHelper.textContent = slotSet.helper + " " + formatSelectedDate(selectedDate) + ", UK time.";
+      }
+
+      slotSet.slots.forEach(function (slot, index) {
+        var label = document.createElement("label");
+        var input = document.createElement("input");
+        var main = document.createElement("span");
+        var meta = document.createElement("small");
+
+        label.className = "slot-option";
+        input.type = "radio";
+        input.name = "preferred_time_slot";
+        input.value = slot;
+        input.required = true;
+        if (index === 0) {
+          input.checked = true;
+        }
+        main.textContent = slot;
+        meta.textContent = selectedRoute + " · " + slotSet.duration + " · UK time";
+
+        label.appendChild(input);
+        label.appendChild(main);
+        label.appendChild(meta);
+        slotOptions.appendChild(label);
+      });
+    }
+
+    if (availabilityRoute) {
+      availabilityRoute.addEventListener("change", renderAvailabilitySlots);
+    }
+    if (availabilityDate) {
+      availabilityDate.min = new Date().toISOString().slice(0, 10);
+      availabilityDate.addEventListener("change", renderAvailabilitySlots);
+    }
+    renderAvailabilitySlots();
+
     availabilityForm.addEventListener("submit", function (event) {
       event.preventDefault();
 
@@ -141,29 +237,25 @@
       var email = availabilityForm.querySelector("[name='email']").value.trim();
       var route = availabilityForm.querySelector("[name='route']").value;
       var notes = availabilityForm.querySelector("[name='notes']").value.trim();
-      var timeOne = availabilityForm.querySelector("[name='possible_time_1']").value;
-      var timeTwo = availabilityForm.querySelector("[name='possible_time_2']").value;
-      var timeThree = availabilityForm.querySelector("[name='possible_time_3']").value;
-      var availability = Array.prototype.slice.call(availabilityForm.querySelectorAll("[name='availability']:checked"))
-        .map(function (input) {
-          return input.value;
-        });
+      var preferredDate = availabilityDate ? availabilityDate.value : "";
+      var selectedSlot = availabilityForm.querySelector("[name='preferred_time_slot']:checked");
 
-      if (!name || !email || !route) {
+      if (!name || !email || !route || !preferredDate || !selectedSlot) {
         if (availabilityStatus) {
-          availabilityStatus.textContent = "Please add your name, email, and interview type.";
+          availabilityStatus.textContent = "Please add your name, email, conversation type, date, and time window.";
         }
         return;
       }
 
       var action = availabilityForm.getAttribute("action") || "";
       var hasFormspreePlaceholder = action.indexOf("YOUR_AVAILABILITY_FORM_ID") !== -1;
-      var possibleTimes = [timeOne, timeTwo, timeThree].filter(Boolean);
+      var duration = availabilityDuration ? availabilityDuration.value : "";
 
       if (!hasFormspreePlaceholder) {
         if (availabilityStatus) {
           availabilityStatus.textContent = "Sending...";
         }
+        availabilityForm.classList.remove("is-sent");
 
         fetch(action, {
           method: "POST",
@@ -175,8 +267,13 @@
               throw new Error("Availability submission failed");
             }
             availabilityForm.reset();
+            renderAvailabilitySlots();
+            availabilityForm.classList.add("is-sent");
+            window.setTimeout(function () {
+              availabilityForm.classList.remove("is-sent");
+            }, 1200);
             if (availabilityStatus) {
-              availabilityStatus.textContent = "Thanks - your availability has been sent.";
+              availabilityStatus.textContent = "Thanks - your preferred time window has been sent.";
             }
           })
           .catch(function () {
@@ -193,8 +290,9 @@
         "I am interested in: " + route,
         "Name: " + name,
         "Email: " + email,
-        "Possible times: " + (possibleTimes.length ? possibleTimes.join(", ") : "Not specified"),
-        "General availability: " + (availability.length ? availability.join(", ") : "Not specified"),
+        "Preferred date: " + preferredDate,
+        "Preferred time window: " + selectedSlot.value + " UK time",
+        "Duration: " + (duration || "Not specified"),
         "",
         "Notes:",
         notes || "None",

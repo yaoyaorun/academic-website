@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter:wght@200;300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260723-3">
+  <link rel="stylesheet" href="style.css?v=20260724-1">
 </head>
 <body data-page="recruitment">
   <header class="site-header">
@@ -255,39 +255,34 @@
           </div>
           <div class="form-row">
             <label for="availability-route">I am interested in</label>
-            <select id="availability-route" name="route" required>
-              <option value="">Select an option</option>
-              <option>One-to-one migrant interview</option>
-              <option>Professional informant interview</option>
-              <option>Not sure yet</option>
+            <select id="availability-route" name="route" data-availability-route required>
+              <option value="">Select a conversation type</option>
+              <option value="Participant interview">Participant interview (60 min)</option>
+              <option value="Expert interview">Expert interview (90 min)</option>
+              <option value="Project collaboration / coffee chat">Project collaboration / coffee chat (20 min)</option>
             </select>
           </div>
-          <div class="calendar-grid">
+          <input type="hidden" name="duration" data-availability-duration>
+          <input type="hidden" name="timezone" value="UK time">
+          <div class="scheduler-picker">
             <div class="form-row">
-              <label for="availability-time-one">Possible time 1</label>
-              <input id="availability-time-one" name="possible_time_1" type="datetime-local">
+              <label for="availability-date">Preferred date</label>
+              <input id="availability-date" name="preferred_date" type="date" data-availability-date required>
             </div>
-            <div class="form-row">
-              <label for="availability-time-two">Possible time 2</label>
-              <input id="availability-time-two" name="possible_time_2" type="datetime-local">
-            </div>
-            <div class="form-row">
-              <label for="availability-time-three">Possible time 3</label>
-              <input id="availability-time-three" name="possible_time_3" type="datetime-local">
+            <div class="slot-panel">
+              <div class="slot-panel__header">
+                <span>Time window</span>
+                <small data-slot-helper>Choose a conversation type and date.</small>
+              </div>
+              <div class="slot-grid" data-slot-options role="radiogroup" aria-label="Suggested time windows"></div>
             </div>
           </div>
-          <fieldset class="availability-options">
-            <legend>General availability</legend>
-            <label><input type="checkbox" name="availability" value="Weekday mornings"> Weekday mornings</label>
-            <label><input type="checkbox" name="availability" value="Weekday afternoons"> Weekday afternoons</label>
-            <label><input type="checkbox" name="availability" value="Weekday evenings"> Weekday evenings</label>
-            <label><input type="checkbox" name="availability" value="Weekend"> Weekend</label>
-          </fieldset>
           <div class="form-row">
             <label for="availability-notes">Notes <span>(optional)</span></label>
             <textarea id="availability-notes" name="notes" rows="5" placeholder="You can include timezone, access needs, or questions."></textarea>
           </div>
           <button class="button button--primary" type="submit">Send availability</button>
+          <span class="heart-confirmation" aria-hidden="true"></span>
           <p class="form-status" data-availability-status role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -303,6 +298,6 @@
     <p>&copy; <span data-year></span> Belonging Across Places.</p>
   </footer>
 
-  <script src="script.js?v=20260723-3"></script>
+  <script src="script.js?v=20260724-1"></script>
 </body>
 </html>
