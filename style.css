@@ -697,9 +697,28 @@ main {
 }
 
 .interview-cards {
+  align-items: start;
   display: grid;
   gap: 1.25rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.interview-cards .route-card {
+  align-content: start;
+}
+
+.interview-cards .language-switcher {
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.7rem;
+}
+
+.interview-cards .language-switcher button {
+  flex: 0 0 auto;
+  font-size: 0.76rem;
+  line-height: 1;
+  min-height: 30px;
+  padding: 0.28rem 0.58rem;
 }
 
 .info-panel,
