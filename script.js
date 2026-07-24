@@ -138,6 +138,8 @@
     var availabilityDate = availabilityForm.querySelector("[data-availability-date]");
     var addDateButton = availabilityForm.querySelector("[data-add-date]");
     var selectedDatesNode = availabilityForm.querySelector("[data-selected-dates]");
+    var quickDateGrid = availabilityForm.querySelector("[data-quick-date-grid]");
+    var rangeMode = availabilityForm.querySelector("[data-range-mode]");
     var availabilityDuration = availabilityForm.querySelector("[data-availability-duration]");
     var slotOptions = availabilityForm.querySelector("[data-slot-options]");
     var slotHelper = availabilityForm.querySelector("[data-slot-helper]");
@@ -145,6 +147,7 @@
     var selectedDatesSummary = availabilityForm.querySelector("[data-selected-dates-summary]");
     var selectedSlotsSummary = availabilityForm.querySelector("[data-selected-slots-summary]");
     var selectedDates = [];
+    var lastRangeAnchor = "";
     var slotSets = {
       "Participant interview": {
         duration: "60 min",
@@ -193,6 +196,13 @@
       });
     }
 
+    function dateToValue(date) {
+      var year = date.getFullYear();
+      var month = String(date.getMonth() + 1).padStart(2, "0");
+      var day = String(date.getDate()).padStart(2, "0");
+      return year + "-" + month + "-" + day;
+    }
+
     function isWeekend(value) {
       var date = new Date(value + "T12:00:00");
       var day = date.getDay();
@@ -212,6 +222,103 @@
       }
     }
 
+    function sortSelectedDates() {
+      selectedDates = selectedDates.filter(function (value, index, array) {
+        return array.indexOf(value) === index;
+      }).sort();
+    }
+
+    function datesBetween(startValue, endValue) {
+      var start = new Date(startValue + "T12:00:00");
+      var end = new Date(endValue + "T12:00:00");
+      var dates = [];
+
+      if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+        return dates;
+      }
+
+      if (start > end) {
+        var temp = start;
+        start = end;
+        end = temp;
+      }
+
+      while (start <= end) {
+        dates.push(dateToValue(start));
+        start.setDate(start.getDate() + 1);
+      }
+
+      return dates;
+    }
+
+    function addDateValue(dateValue) {
+      if (!dateValue) {
+        return;
+      }
+
+      if (selectedDates.indexOf(dateValue) === -1) {
+        selectedDates.push(dateValue);
+      }
+      sortSelectedDates();
+    }
+
+    function toggleDateValue(dateValue) {
+      if (!dateValue) {
+        return;
+      }
+
+      if (rangeMode && rangeMode.checked && (lastRangeAnchor || selectedDates.length)) {
+        var anchor = lastRangeAnchor || selectedDates[selectedDates.length - 1];
+        datesBetween(anchor, dateValue).forEach(addDateValue);
+      } else if (selectedDates.indexOf(dateValue) === -1) {
+        selectedDates.push(dateValue);
+        sortSelectedDates();
+      } else {
+        selectedDates = selectedDates.filter(function (value) {
+          return value !== dateValue;
+        });
+      }
+
+      lastRangeAnchor = dateValue;
+      renderSelectedDates();
+      renderQuickDates();
+      renderAvailabilitySlots();
+    }
+
+    function renderQuickDates() {
+      if (!quickDateGrid) {
+        return;
+      }
+
+      var today = new Date();
+      today.setHours(12, 0, 0, 0);
+      quickDateGrid.innerHTML = "";
+
+      for (var index = 0; index < 14; index += 1) {
+        var date = new Date(today);
+        var button = document.createElement("button");
+        var dayName = document.createElement("span");
+        var dateLabel = document.createElement("small");
+        var value;
+
+        date.setDate(today.getDate() + index);
+        value = dateToValue(date);
+
+        button.type = "button";
+        button.className = "quick-date";
+        button.setAttribute("aria-pressed", selectedDates.indexOf(value) !== -1 ? "true" : "false");
+        button.setAttribute("data-date", value);
+        dayName.textContent = date.toLocaleDateString("en-GB", { weekday: "short" });
+        dateLabel.textContent = date.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+        button.appendChild(dayName);
+        button.appendChild(dateLabel);
+        button.addEventListener("click", function () {
+          toggleDateValue(this.getAttribute("data-date"));
+        });
+        quickDateGrid.appendChild(button);
+      }
+    }
+
     function renderSelectedDates() {
       if (!selectedDatesNode) {
         return;
@@ -228,7 +335,11 @@
           selectedDates = selectedDates.filter(function (value) {
             return value !== dateValue;
           });
+          if (lastRangeAnchor === dateValue) {
+            lastRangeAnchor = selectedDates[selectedDates.length - 1] || "";
+          }
           renderSelectedDates();
+          renderQuickDates();
           renderAvailabilitySlots();
         });
         selectedDatesNode.appendChild(chip);
@@ -241,18 +352,20 @@
         return;
       }
 
-      if (selectedDates.indexOf(availabilityDate.value) === -1) {
-        selectedDates.push(availabilityDate.value);
-        selectedDates.sort();
-      }
+      addDateValue(availabilityDate.value);
+      lastRangeAnchor = availabilityDate.value;
       availabilityDate.value = "";
       renderSelectedDates();
+      renderQuickDates();
       renderAvailabilitySlots();
     }
 
     function slotsForDate(slotSet, dateValue, windows) {
       var weekendDate = isWeekend(dateValue);
-      var usableWindows = windows.filter(function (windowName) {
+      var activeWindows = windows.length
+        ? windows
+        : (weekendDate ? ["weekend"] : ["weekday-morning", "weekday-afternoon", "weekday-evening"]);
+      var usableWindows = activeWindows.filter(function (windowName) {
         return weekendDate ? windowName === "weekend" : windowName !== "weekend";
       });
 
@@ -278,15 +391,17 @@
         slotDuration.textContent = slotSet ? "(" + slotSet.duration + " slots, UK time)" : "";
       }
 
-      if (!slotSet || !selectedDates.length || !windows.length) {
+      if (!slotSet || !selectedDates.length) {
         if (slotHelper) {
-          slotHelper.textContent = "Choose a conversation type, general availability, and one or more dates. You may select slots across days.";
+          slotHelper.textContent = "Choose a conversation type and one or more dates. General availability can narrow the slots.";
         }
         return;
       }
 
       if (slotHelper) {
-        slotHelper.textContent = slotSet.helper + " All times are UK time.";
+        slotHelper.textContent = slotSet.helper + (windows.length
+          ? " Filtered by your general availability. All times are UK time."
+          : " Showing reasonable UK-time slots for your selected dates.");
       }
 
       selectedDates.forEach(function (dateValue) {
@@ -344,6 +459,7 @@
       input.addEventListener("change", renderAvailabilitySlots);
     });
     renderSelectedDates();
+    renderQuickDates();
     renderAvailabilitySlots();
 
     availabilityForm.addEventListener("submit", function (event) {
@@ -402,7 +518,9 @@
             }
             availabilityForm.reset();
             selectedDates = [];
+            lastRangeAnchor = "";
             renderSelectedDates();
+            renderQuickDates();
             renderAvailabilitySlots();
             availabilityForm.classList.add("is-sent");
             window.setTimeout(function () {

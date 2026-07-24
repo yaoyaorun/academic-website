@@ -693,7 +693,7 @@ main {
 }
 
 .interview-layout {
-  grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.72fr);
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.86fr);
 }
 
 .interview-cards {
@@ -884,7 +884,7 @@ main {
 .availability-form {
   align-self: start;
   margin-left: auto;
-  max-width: 430px;
+  max-width: 520px;
   width: 100%;
 }
 
@@ -917,6 +917,78 @@ main {
   flex-wrap: wrap;
   gap: 0.45rem;
   min-height: 1.6rem;
+}
+
+.date-picker-tools {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.4rem;
+}
+
+.date-picker-tools label {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  font-size: 0.82rem;
+  font-weight: 360;
+  gap: 0.45rem;
+}
+
+.date-picker-tools input {
+  accent-color: var(--accent);
+}
+
+.date-picker-tools small {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.quick-date-grid {
+  display: grid;
+  gap: 0.4rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: 0.65rem;
+}
+
+.quick-date {
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(104, 117, 114, 0.18);
+  border-radius: 8px;
+  color: var(--ink);
+  cursor: pointer;
+  display: grid;
+  font: inherit;
+  gap: 0.08rem;
+  min-height: 46px;
+  padding: 0.45rem 0.3rem;
+  text-align: center;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.quick-date:hover {
+  border-color: rgba(104, 117, 114, 0.34);
+  transform: translateY(-1px);
+}
+
+.quick-date:focus-visible {
+  outline: 2px solid var(--accent-dark);
+  outline-offset: 2px;
+}
+
+.quick-date[aria-pressed="true"] {
+  background: rgba(204, 223, 216, 0.42);
+  border-color: rgba(104, 117, 114, 0.5);
+}
+
+.quick-date span {
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 420;
+}
+
+.quick-date small {
+  color: var(--muted);
+  font-size: 0.68rem;
 }
 
 .date-chip {
@@ -968,7 +1040,7 @@ main {
 .slot-grid {
   display: grid;
   gap: 0.85rem;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .slot-day {
@@ -1498,6 +1570,10 @@ textarea {
 
   .slot-grid {
     grid-template-columns: 1fr;
+  }
+
+  .quick-date-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .date-add-row {

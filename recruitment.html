@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter:wght@200;300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260724-3">
+  <link rel="stylesheet" href="style.css?v=20260724-4">
 </head>
 <body data-page="recruitment">
   <header class="site-header">
@@ -289,11 +289,16 @@
                 <button class="button button--ghost" type="button" data-add-date>Add date</button>
               </div>
               <div class="selected-dates" data-selected-dates aria-live="polite"></div>
+              <div class="date-picker-tools">
+                <label><input type="checkbox" data-range-mode> Select a date range</label>
+                <small>Click several dates, or turn on range mode and choose a start and end date.</small>
+              </div>
+              <div class="quick-date-grid" data-quick-date-grid aria-label="Quick date picker"></div>
             </div>
             <div class="slot-panel">
               <div class="slot-panel__header">
                 <span>Time slots <em data-slot-duration></em></span>
-                <small data-slot-helper>Choose a type, general availability, and one or more dates. You may select slots across days.</small>
+                <small data-slot-helper>Choose a type and one or more dates. General availability can narrow the slots.</small>
               </div>
               <div class="slot-grid" data-slot-options role="group" aria-label="Suggested time slots"></div>
             </div>
@@ -320,6 +325,6 @@
     <p>&copy; <span data-year></span> Belonging Across Places.</p>
   </footer>
 
-  <script src="script.js?v=20260724-3"></script>
+  <script src="script.js?v=20260724-4"></script>
 </body>
 </html>
