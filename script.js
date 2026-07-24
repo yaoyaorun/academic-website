@@ -68,38 +68,54 @@
   window.addEventListener("pointermove", updateAmbient, { passive: true });
   window.addEventListener("touchmove", updateAmbient, { passive: true });
 
-  try {
-    if (followStatus && localStorage.getItem("yao-project-followed")) {
-      followStatus.textContent = "You are following this project on this browser.";
-    }
-  } catch (error) {
-    // Browsers may block localStorage in private contexts.
-  }
-
   if (followForm) {
     followForm.addEventListener("submit", function (event) {
       event.preventDefault();
 
+      var nameInput = followForm.querySelector("input[name='name']");
       var emailInput = followForm.querySelector("input[type='email']");
+      var name = nameInput ? nameInput.value.trim() : "";
       var email = emailInput ? emailInput.value.trim() : "";
+      var action = followForm.getAttribute("action") || "";
 
-      if (!email) {
+      if (!name || !email) {
         if (followStatus) {
-          followStatus.textContent = "Please enter an email address.";
+          followStatus.textContent = "Please add your name and email address.";
         }
         return;
       }
 
-      try {
-        localStorage.setItem("yao-project-followed", "true");
-      } catch (error) {
-        // Browsers may block localStorage in private contexts.
+      if (!action || action.indexOf("YOUR_FORM_ID") !== -1) {
+        followForm.reset();
+        if (followStatus) {
+          followStatus.textContent = "Thank you - this follow form will send once the Formspree ID is added.";
+        }
+        return;
       }
 
-      followForm.reset();
       if (followStatus) {
-        followStatus.textContent = "Thank you - this placeholder follow interaction is working.";
+        followStatus.textContent = "Sending...";
       }
+
+      fetch(action, {
+        method: "POST",
+        body: new FormData(followForm),
+        headers: { "Accept": "application/json" }
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Follow submission failed");
+          }
+          followForm.reset();
+          if (followStatus) {
+            followStatus.textContent = "Thank you - you are now on the project follower list.";
+          }
+        })
+        .catch(function () {
+          if (followStatus) {
+            followStatus.textContent = "Something went wrong. Please try again or email directly.";
+          }
+        });
     });
   }
 
