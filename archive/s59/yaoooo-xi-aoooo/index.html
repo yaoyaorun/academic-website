@@ -1406,8 +1406,102 @@
       border-bottom: 1px solid rgba(63,120,141,.24);
     }
 
+    .mew-ear-trigger {
+      position: relative;
+      width: 42px;
+      height: 24px;
+      margin-left: 10px;
+      border: 1px solid rgba(78,74,65,.18);
+      border-radius: 4px;
+      background: rgba(104,66,64,.08);
+      vertical-align: middle;
+      opacity: .58;
+      transition: opacity .2s ease, transform .2s ease, border-color .2s ease;
+    }
+
+    .mew-ear-trigger:hover {
+      opacity: .92;
+      transform: translateY(-2px);
+      border-color: rgba(104,66,64,.26);
+    }
+
+    .mew-ear-trigger::after {
+      content: "Meow transfer note";
+      position: absolute;
+      right: 0;
+      bottom: 32px;
+      width: max-content;
+      max-width: 190px;
+      padding: 7px 9px;
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      background: rgba(252,252,250,.82);
+      box-shadow: 0 10px 30px rgba(23,26,29,.08);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(4px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .mew-ear-trigger:hover::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mew-ear-mark {
+      position: absolute;
+      left: 7px;
+      top: 6px;
+      width: 14px;
+      height: 10px;
+      border: 1.5px solid rgba(104,66,64,.58);
+      border-radius: 4px 4px 6px 6px;
+    }
+
+    .mew-ear-mark::before,
+    .mew-ear-mark::after {
+      content: "";
+      position: absolute;
+      top: -6px;
+      width: 7px;
+      height: 7px;
+      border: 1.5px solid rgba(104,66,64,.58);
+      border-bottom: 0;
+      background: rgba(252,252,250,.58);
+    }
+
+    .mew-ear-mark::before {
+      left: -2px;
+      transform: rotate(-14deg) skewY(24deg);
+      border-radius: 5px 5px 1px 1px;
+    }
+
+    .mew-ear-mark::after {
+      right: -2px;
+      transform: rotate(14deg) skewY(-24deg);
+      border-radius: 5px 5px 1px 1px;
+    }
+
+    .mew-ear-trigger::before {
+      content: "Meow";
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      color: rgba(104,66,64,.66);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
     .lightbox,
-    .easter-egg {
+    .easter-egg,
+    .mew-portal {
       position: fixed;
       inset: 0;
       z-index: 20;
@@ -1420,7 +1514,8 @@
     }
 
     .lightbox.open,
-    .easter-egg.open {
+    .easter-egg.open,
+    .mew-portal.open {
       display: flex;
     }
 
@@ -1505,6 +1600,89 @@
       border-radius: 8px;
       background: rgba(159,203,216,.08);
       overflow-wrap: anywhere;
+    }
+
+    .mew-panel {
+      background:
+        radial-gradient(circle at 88% 18%, rgba(94,170,224,.12), transparent 15rem),
+        #fff;
+    }
+
+    .mew-panel h2 {
+      max-width: 680px;
+    }
+
+    .mew-note-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, .75fr);
+      gap: 22px;
+      margin-top: 26px;
+      align-items: stretch;
+    }
+
+    .youtube-placeholder {
+      min-height: 315px;
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 44%, rgba(255,214,138,.18), transparent 7rem),
+        linear-gradient(135deg, rgba(23,26,29,.9), rgba(45,51,53,.86));
+      color: rgba(255,255,255,.82);
+    }
+
+    .youtube-placeholder strong {
+      display: block;
+      margin-top: 12px;
+      color: #fff;
+      font-size: clamp(24px, 4vw, 42px);
+      font-weight: 500;
+    }
+
+    .youtube-placeholder span {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .mew-play {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 14px;
+      border: 1px solid rgba(255,255,255,.48);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      color: #fff;
+    }
+
+    .mew-transfer-copy {
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      padding: 22px;
+      background: rgba(252,252,250,.72);
+    }
+
+    .mew-transfer-copy p {
+      margin-top: 14px;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .mew-transfer-copy blockquote {
+      margin: 18px 0 0;
+      border-left: 2px solid rgba(94,170,224,.36);
+      padding-left: 14px;
+      color: var(--archive-ink);
+      font-family: var(--font-grey);
+      font-size: 24px;
+      line-height: 1.28;
     }
 
     .fade-in {
@@ -2122,7 +2300,12 @@ become the same thing as controlling them?</p>
   <footer>
     <div class="shell footer-inner">
       <span>© 2168 Blue Planet Museum</span>
-      <span>All civilizations are preserved. Some memories are intentionally <a href="#yaoooo-s59-xi-archive-aoooo" id="unavailableLink">unavailable</a>.</span>
+      <span>
+        All civilizations are preserved. Some memories are intentionally <a href="#yaoooo-s59-xi-archive-aoooo" id="unavailableLink">unavailable</a>.
+        <button class="mew-ear-trigger" type="button" id="mewEarTrigger" aria-label="Open Meow transfer note">
+          <span class="mew-ear-mark" aria-hidden="true"></span>
+        </button>
+      </span>
     </div>
   </footer>
 
@@ -2146,6 +2329,30 @@ become the same thing as controlling them?</p>
         <div><span>ACCESS STATUS</span><strong>PARTIAL</strong></div>
         <div><span>READING RESULT</span><strong>UNKNOWN</strong></div>
         <div><span>FINAL NOTE</span><strong>PLEASE ASK DIRECTLY</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mew-portal" id="mewPortal" role="dialog" aria-modal="true" aria-label="Meow transfer note">
+    <div class="modal-card mew-panel">
+      <button class="modal-close" type="button" data-close="mewPortal" aria-label="Close Meow transfer note">×</button>
+      <p class="eyebrow">Side Archive / Community Wellbeing Transfer</p>
+      <h2>Meow Transfer Note</h2>
+      <p class="lede">A small record attached to the Grey Star lifestyle exhibition by a former courier, later registered on Blue Star as a community wellbeing officer.</p>
+      <div class="mew-note-grid">
+        <div class="youtube-placeholder" aria-label="YouTube video placeholder for The Vanishing Star">
+          <div>
+            <div class="mew-play">PLAY</div>
+            <span>YouTube placeholder</span>
+            <strong>The Vanishing Star</strong>
+          </div>
+        </div>
+        <div class="mew-transfer-copy">
+          <span class="mono-label">Meow Companion Unit / Discontinued Line</span>
+          <p>Before emotional care became a civic interface, Grey Star households received quiet companion robots called Meow. They were not built to solve loneliness. They were built to stay near it.</p>
+          <p>One courier remembered delivering a discontinued Meow unit to a human named Leo. Years later, while helping him move, she found that the package had become a story nobody could fully classify.</p>
+          <blockquote>I carried the box once. Later, I understood that it had carried someone else.</blockquote>
+        </div>
       </div>
     </div>
   </div>
@@ -2301,7 +2508,12 @@ become the same thing as controlling them?</p>
       });
     });
 
-    [lightbox, egg].forEach((modal) => {
+    const mewPortal = document.getElementById('mewPortal');
+    document.getElementById('mewEarTrigger').addEventListener('click', () => {
+      mewPortal.classList.add('open');
+    });
+
+    [lightbox, egg, mewPortal].forEach((modal) => {
       modal.addEventListener('click', (event) => {
         if (event.target === modal) modal.classList.remove('open');
       });
@@ -2311,6 +2523,7 @@ become the same thing as controlling them?</p>
       if (event.key === 'Escape') {
         lightbox.classList.remove('open');
         egg.classList.remove('open');
+        mewPortal.classList.remove('open');
       }
     });
 
