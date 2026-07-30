@@ -2510,6 +2510,7 @@ become the same thing as controlling them?</p>
 
     const mewPortal = document.getElementById('mewPortal');
     document.getElementById('mewEarTrigger').addEventListener('click', () => {
+      history.replaceState(null, '', '#meow-transfer-note');
       mewPortal.classList.add('open');
     });
 
@@ -2594,6 +2595,11 @@ become the same thing as controlling them?</p>
     if (location.hash === '#yaoooo-s59-xi-archive-aoooo') {
       document.body.classList.add('admitted');
       egg.classList.add('open');
+    }
+
+    if (location.hash === '#meow-transfer-note') {
+      document.body.classList.add('admitted');
+      mewPortal.classList.add('open');
     }
   </script>
 </body>
