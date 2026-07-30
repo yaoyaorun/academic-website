@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>THE GREY CIVILIZATION | Blue Planet Museum</title>
   <style>
     :root {
@@ -1614,14 +1615,16 @@
 
     .mew-note-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(280px, .75fr);
+      grid-template-columns: minmax(0, 1fr) minmax(190px, .46fr);
       gap: 22px;
       margin-top: 26px;
       align-items: stretch;
     }
 
     .youtube-embed {
-      min-height: 315px;
+      grid-column: 1 / -1;
+      position: relative;
+      aspect-ratio: 16 / 9;
       border: 1px solid var(--faint);
       border-radius: 8px;
       overflow: hidden;
@@ -1631,9 +1634,20 @@
     .youtube-embed iframe {
       display: block;
       width: 100%;
-      aspect-ratio: 16 / 9;
-      min-height: 315px;
+      height: 100%;
       border: 0;
+    }
+
+    .video-fallback {
+      display: inline-flex;
+      margin-top: 12px;
+      color: var(--blue-deep);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(63,120,141,.28);
     }
 
     .mew-transfer-copy {
@@ -1641,6 +1655,37 @@
       border-radius: 8px;
       padding: 22px;
       background: rgba(252,252,250,.72);
+    }
+
+    .mew-officer-card {
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 70% 18%, rgba(94,170,224,.1), transparent 8rem),
+        rgba(252,252,250,.58);
+      padding: 18px;
+      display: grid;
+      align-content: end;
+      justify-items: center;
+      min-height: 310px;
+    }
+
+    .mew-officer-card img {
+      width: min(150px, 70%);
+      height: auto;
+      display: block;
+      filter: saturate(.9) contrast(.98);
+    }
+
+    .mew-officer-card p {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      line-height: 1.55;
+      text-align: center;
+      text-transform: uppercase;
     }
 
     .mew-transfer-copy p {
@@ -1784,6 +1829,14 @@
   </style>
 </head>
 <body>
+  <script>
+    (function () {
+      const directArchiveHashes = ['#yaoooo-s59-xi-archive-aoooo', '#meow-transfer-note'];
+      if (directArchiveHashes.includes(window.location.hash)) {
+        document.body.classList.add('admitted');
+      }
+    }());
+  </script>
   <div class="constellation" aria-hidden="true">
     <span class="star-node" style="--x:7%;--y:13%;--s:2px;--o:.34;--t:9s;--d:-1s;--l:74px;--r:24deg"></span>
     <span class="star-node" style="--x:17%;--y:31%;--s:3px;--o:.2;--t:12s;--d:-5s"></span>
@@ -2318,14 +2371,20 @@ become the same thing as controlling them?</p>
           <iframe
             src="https://www.youtube.com/embed/pagVezxp_iw"
             title="The Vanishing Star"
+            referrerpolicy="strict-origin-when-cross-origin"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen></iframe>
+          <a class="video-fallback" href="https://www.youtube.com/watch?v=pagVezxp_iw" target="_blank" rel="noopener">Open on YouTube</a>
         </div>
         <div class="mew-transfer-copy">
           <span class="mono-label">Meow Companion Unit / Discontinued Line</span>
           <p>Before emotional care became a civic interface, Grey Star households received quiet companion robots called Meow. They were not built to solve loneliness. They were built to stay near it.</p>
           <p>One courier remembered delivering a discontinued Meow unit to a human named Leo. Years later, while helping him move, she found that the package had become a story nobody could fully classify.</p>
           <blockquote>I carried the box once. Later, I understood that it had carried someone else.</blockquote>
+        </div>
+        <div class="mew-officer-card" aria-label="Community wellbeing officer record">
+          <img src="assets/mew/blue-star-community-officer.png" alt="Community wellbeing officer in Blue Star uniform">
+          <p>Community Wellbeing Officer<br>Former Grey Star Courier</p>
         </div>
       </div>
     </div>
@@ -2488,6 +2547,21 @@ become the same thing as controlling them?</p>
       mewPortal.classList.add('open');
     });
 
+    function openDirectArchiveHash() {
+      if (location.hash === '#yaoooo-s59-xi-archive-aoooo') {
+        document.body.classList.add('admitted');
+        egg.classList.add('open');
+      }
+
+      if (location.hash === '#meow-transfer-note') {
+        document.body.classList.add('admitted');
+        mewPortal.classList.add('open');
+      }
+    }
+
+    openDirectArchiveHash();
+    window.addEventListener('hashchange', openDirectArchiveHash);
+
     [lightbox, egg, mewPortal].forEach((modal) => {
       modal.addEventListener('click', (event) => {
         if (event.target === modal) modal.classList.remove('open');
@@ -2566,15 +2640,6 @@ become the same thing as controlling them?</p>
       });
     });
 
-    if (location.hash === '#yaoooo-s59-xi-archive-aoooo') {
-      document.body.classList.add('admitted');
-      egg.classList.add('open');
-    }
-
-    if (location.hash === '#meow-transfer-note') {
-      document.body.classList.add('admitted');
-      mewPortal.classList.add('open');
-    }
   </script>
 </body>
 </html>
