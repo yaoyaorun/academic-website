@@ -1620,46 +1620,20 @@
       align-items: stretch;
     }
 
-    .youtube-placeholder {
+    .youtube-embed {
       min-height: 315px;
       border: 1px solid var(--faint);
       border-radius: 8px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      background:
-        radial-gradient(circle at 50% 44%, rgba(255,214,138,.18), transparent 7rem),
-        linear-gradient(135deg, rgba(23,26,29,.9), rgba(45,51,53,.86));
-      color: rgba(255,255,255,.82);
+      overflow: hidden;
+      background: #111;
     }
 
-    .youtube-placeholder strong {
+    .youtube-embed iframe {
       display: block;
-      margin-top: 12px;
-      color: #fff;
-      font-size: clamp(24px, 4vw, 42px);
-      font-weight: 500;
-    }
-
-    .youtube-placeholder span {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-
-    .mew-play {
-      width: 58px;
-      height: 58px;
-      margin: 0 auto 14px;
-      border: 1px solid rgba(255,255,255,.48);
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: .12em;
-      color: #fff;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 315px;
+      border: 0;
     }
 
     .mew-transfer-copy {
@@ -2340,12 +2314,12 @@ become the same thing as controlling them?</p>
       <h2>Meow Transfer Note</h2>
       <p class="lede">A small record attached to the Grey Star lifestyle exhibition by a former courier, later registered on Blue Star as a community wellbeing officer.</p>
       <div class="mew-note-grid">
-        <div class="youtube-placeholder" aria-label="YouTube video placeholder for The Vanishing Star">
-          <div>
-            <div class="mew-play">PLAY</div>
-            <span>YouTube placeholder</span>
-            <strong>The Vanishing Star</strong>
-          </div>
+        <div class="youtube-embed" aria-label="Embedded YouTube video for The Vanishing Star">
+          <iframe
+            src="https://www.youtube.com/embed/pagVezxp_iw"
+            title="The Vanishing Star"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
         </div>
         <div class="mew-transfer-copy">
           <span class="mono-label">Meow Companion Unit / Discontinued Line</span>
