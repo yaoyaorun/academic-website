@@ -1,0 +1,2387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>THE GREY CIVILIZATION | Blue Planet Museum</title>
+  <style>
+    :root {
+      --white: #fcfcfa;
+      --white-blue: #f5fafb;
+      --paper: #f4f0e6;
+      --ink: #171a1d;
+      --muted: #6b7378;
+      --faint: #dfe6e6;
+      --blue: #5eaadf;
+      --blue-deep: #3f788d;
+      --silver: #cbd2d1;
+      --archive-ink: #4e4a41;
+      --warning: #8c5c52;
+      --shadow: 0 24px 80px rgba(34, 44, 49, .12);
+      --font-blue: "Avenir Next", "SF Pro Display", "Helvetica Neue", Inter, Arial, sans-serif;
+      --font-grey: "Cormorant Garamond", "EB Garamond", Georgia, "Times New Roman", serif;
+      --font-mono: "IBM Plex Mono", "Space Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 50% 16rem, rgba(123, 175, 212, .12), transparent 21rem),
+        linear-gradient(180deg, var(--white) 0%, var(--white) 42%, #f7f9f7 100%);
+      color: var(--ink);
+      font-family: var(--font-blue);
+      letter-spacing: 0;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(23, 26, 29, .018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 26, 29, .012) 1px, transparent 1px);
+      background-size: 100% 9px, 9px 100%;
+      opacity: .55;
+      z-index: 9;
+    }
+
+    .constellation {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .star-node {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--s);
+      height: var(--s);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #d8f2ff 0 12%, var(--blue) 48%, #2f7fb6 100%);
+      opacity: var(--o);
+      box-shadow: 0 0 14px rgba(94, 170, 224, .58);
+      animation: starPulse var(--t) ease-in-out infinite;
+      animation-delay: var(--d);
+    }
+
+    .star-node::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--l, 0);
+      height: 1px;
+      transform: rotate(var(--r, 0deg));
+      transform-origin: left center;
+      background: linear-gradient(90deg, rgba(94,170,224,.34), transparent);
+    }
+
+    @keyframes starPulse {
+      0%, 100% {
+        opacity: calc(var(--o) * .7);
+        transform: translate3d(0, 0, 0);
+      }
+      50% {
+        opacity: calc(var(--o) * 1.35);
+        transform: translate3d(10px, -13px, 0);
+      }
+    }
+
+    a { color: inherit; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .shell {
+      width: min(var(--max), calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      border-bottom: 1px solid rgba(223, 230, 230, .75);
+      background: rgba(252, 252, 250, .86);
+      backdrop-filter: blur(22px);
+    }
+
+    .topbar-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .brand-planet, .hero-planet {
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 38% 32%, rgba(255,255,255,.94), transparent 16%),
+        radial-gradient(circle at 62% 64%, rgba(63,120,141,.18), transparent 28%),
+        linear-gradient(145deg, rgba(159,203,216,.68), rgba(221,239,242,.26));
+      box-shadow:
+        inset -18px -24px 45px rgba(63,120,141,.08),
+        inset 12px 14px 42px rgba(255,255,255,.9),
+        0 22px 60px rgba(63,120,141,.12);
+    }
+
+    .brand-planet {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+    }
+
+    .brand-text {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .brand-text strong {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .09em;
+      white-space: nowrap;
+    }
+
+    .brand-text span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+
+    nav a {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      color: var(--ink);
+      background: rgba(159,203,216,.15);
+    }
+
+    section {
+      position: relative;
+      padding: 96px 0;
+    }
+
+    body:not(.admitted) .topbar,
+    body:not(.admitted) .exhibition-main,
+    body:not(.admitted) .floating-sponsors,
+    body:not(.admitted) footer {
+      display: none;
+    }
+
+    body.admitted .ticket-gate {
+      display: none;
+    }
+
+    .ticket-gate {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 48px 0;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(123,175,212,.14), transparent 22rem),
+        linear-gradient(180deg, #fff, var(--white));
+      position: relative;
+      z-index: 1;
+    }
+
+    .ticket-terminal {
+      width: min(760px, calc(100% - 36px));
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      background: rgba(255,255,255,.74);
+      box-shadow: var(--shadow);
+      padding: clamp(26px, 5vw, 48px);
+    }
+
+    .ticket-terminal h1 {
+      font-size: clamp(38px, 6vw, 76px);
+      line-height: .95;
+      max-width: 720px;
+    }
+
+    .ticket-form {
+      display: grid;
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .select-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+      color: var(--blue-deep);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .select-hint::before,
+    .select-hint::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 12px rgba(94,170,224,.5);
+      animation: hintDrift 1.9s ease-in-out infinite;
+    }
+
+    .select-hint::after {
+      animation-delay: .32s;
+    }
+
+    @keyframes hintDrift {
+      0%, 100% { transform: translateY(0); opacity: .58; }
+      50% { transform: translateY(7px); opacity: 1; }
+    }
+
+    .ticket-fieldset {
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      padding: 18px;
+      background: rgba(255,255,255,.55);
+    }
+
+    .ticket-fieldset legend {
+      padding: 0 8px;
+      color: var(--blue-deep);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .ticket-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      color: var(--ink);
+    }
+
+    .ticket-option input {
+      accent-color: var(--blue-deep);
+    }
+
+    .ticket-price {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      border: 1px solid rgba(123,175,212,.28);
+      border-radius: 8px;
+      padding: 18px;
+      background: rgba(123,175,212,.08);
+      font-family: var(--font-mono);
+    }
+
+    .ticket-price strong {
+      font-size: 24px;
+      font-weight: 500;
+    }
+
+    .ticket-result {
+      min-height: 82px;
+      margin: 0;
+      color: var(--blue-deep);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.7;
+      letter-spacing: .03em;
+      white-space: pre-line;
+    }
+
+    .hero {
+      min-height: calc(100svh - 64px);
+      display: grid;
+      place-items: center;
+      padding: 64px 0 48px;
+      background:
+        radial-gradient(circle at center, rgba(159,203,216,.13), transparent 20rem),
+        linear-gradient(180deg, #fff 0%, var(--white) 100%);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .ticket-gate::before,
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(94, 170, 224, .55) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 27% 72%, rgba(94, 170, 224, .3) 0 2px, transparent 3px),
+        radial-gradient(circle at 41% 28%, rgba(94, 170, 224, .44) 0 1px, transparent 2px),
+        radial-gradient(circle at 56% 63%, rgba(94, 170, 224, .28) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 73% 34%, rgba(94, 170, 224, .5) 0 2px, transparent 3px),
+        radial-gradient(circle at 86% 78%, rgba(94, 170, 224, .32) 0 1px, transparent 2px);
+      opacity: .95;
+      background-size: 96% 96%, 104% 104%, 92% 92%, 108% 108%, 98% 98%, 102% 102%;
+      filter: drop-shadow(0 0 7px rgba(94, 170, 224, .35));
+      animation: gateStarDrift 6.5s ease-in-out infinite alternate;
+    }
+
+    .ticket-gate::after,
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 22% 42%, rgba(94,170,224,.72) 0 2px, transparent 3px),
+        radial-gradient(circle at 64% 18%, rgba(94,170,224,.5) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 78% 66%, rgba(94,170,224,.62) 0 2px, transparent 3px),
+        radial-gradient(circle at 34% 84%, rgba(94,170,224,.42) 0 1px, transparent 2px);
+      opacity: .72;
+      filter: drop-shadow(0 0 8px rgba(94, 170, 224, .42));
+      animation: gateStarDriftAlt 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes gateStarDrift {
+      0% {
+        opacity: .62;
+        background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+        transform: translate3d(0, 0, 0);
+      }
+      100% {
+        opacity: 1;
+        background-position: 26px -24px, -22px 21px, 28px 16px, -26px -18px, 18px 24px, -21px 16px;
+        transform: translate3d(18px, -20px, 0);
+      }
+    }
+
+    @keyframes gateStarDriftAlt {
+      0% {
+        opacity: .46;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      100% {
+        opacity: .92;
+        transform: translate3d(-22px, 17px, 0) scale(1.025);
+      }
+    }
+
+    .hero h1 {
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero h1::after {
+      content: "";
+      position: absolute;
+      inset: -18px -32px;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 8% 28%, rgba(94,170,224,.72) 0 2px, transparent 3px),
+        radial-gradient(circle at 17% 78%, rgba(94,170,224,.36) 0 1px, transparent 2px),
+        radial-gradient(circle at 87% 18%, rgba(94,170,224,.6) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 96% 65%, rgba(94,170,224,.42) 0 2px, transparent 3px);
+      opacity: .7;
+    }
+
+    .hero-planet {
+      width: clamp(160px, 28vw, 320px);
+      aspect-ratio: 1;
+      margin: 0 auto 44px;
+      opacity: .72;
+      position: relative;
+      animation: planetFloat 8s ease-in-out infinite;
+    }
+
+    .hero-planet::before,
+    .hero-planet::after {
+      content: "";
+      position: absolute;
+      inset: -9%;
+      border: 1px solid rgba(159,203,216,.32);
+      border-radius: 50%;
+      transform: rotate(18deg) scaleY(.32);
+    }
+
+    .hero-planet::after {
+      inset: -15%;
+      opacity: .45;
+      transform: rotate(-24deg) scaleY(.22);
+    }
+
+    @keyframes planetFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--blue-deep);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font-size: clamp(52px, 8vw, 112px);
+      line-height: .9;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      max-width: 900px;
+      font-size: clamp(34px, 5vw, 66px);
+      line-height: .98;
+    }
+
+    h3 {
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.08;
+    }
+
+    p {
+      line-height: 1.65;
+    }
+
+    .hero-subtitle {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 24px);
+      letter-spacing: .04em;
+    }
+
+    .exhibition-type {
+      margin: 8px 0 0;
+      color: var(--ink);
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 400;
+    }
+
+    .date-line {
+      margin-top: 28px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: .08em;
+    }
+
+    .tagline {
+      max-width: 560px;
+      margin: 28px auto 0;
+      color: var(--muted);
+      font-family: var(--font-grey);
+      font-size: clamp(21px, 3vw, 31px);
+      line-height: 1.28;
+    }
+
+    .btn {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid var(--faint);
+      border-radius: 999px;
+      padding: 0 20px;
+      background: rgba(255,255,255,.72);
+      color: var(--ink);
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 36px rgba(23, 26, 29, .08);
+      background: #fff;
+    }
+
+    .btn.primary {
+      border-color: var(--blue-deep);
+      background: var(--blue-deep);
+      color: #fff;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, .86fr) minmax(320px, 1.14fr);
+      align-items: start;
+      gap: clamp(34px, 7vw, 90px);
+    }
+
+    .lede {
+      max-width: 720px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .museum-card {
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      background: rgba(255,255,255,.66);
+      box-shadow: 0 16px 42px rgba(23, 26, 29, .06);
+      padding: clamp(22px, 3vw, 34px);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .meta {
+      min-height: 138px;
+    }
+
+    .mono-label {
+      display: block;
+      color: var(--blue-deep);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .meta strong,
+    .sponsor strong {
+      display: block;
+      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    .meta p,
+    .caption,
+    .sponsor p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .artifact-room {
+      background:
+        radial-gradient(circle at 74% 22%, rgba(159,203,216,.14), transparent 22rem),
+        linear-gradient(180deg, #fff, var(--white-blue));
+      border-top: 1px solid var(--faint);
+      border-bottom: 1px solid var(--faint);
+    }
+
+    .artifact-grid {
+      display: grid;
+      grid-template-columns: minmax(310px, .95fr) minmax(0, 1.05fr);
+      gap: clamp(32px, 7vw, 86px);
+      align-items: center;
+    }
+
+    .vitrine {
+      min-height: 560px;
+      border: 1px solid rgba(203,210,209,.82);
+      border-radius: 8px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.24), rgba(255,255,255,.74), rgba(255,255,255,.24)),
+        radial-gradient(circle at 50% 34%, rgba(255,255,255,.94), transparent 18rem);
+      box-shadow: inset 0 0 60px rgba(203,210,209,.22), var(--shadow);
+    }
+
+    .vitrine::before {
+      content: "";
+      position: absolute;
+      inset: 28px;
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .vitrine::after {
+      content: "";
+      position: absolute;
+      inset: 9%;
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 14% 28%, rgba(123,175,212,.55) 0 2px, transparent 3px),
+        radial-gradient(circle at 84% 23%, rgba(123,175,212,.38) 0 1px, transparent 2px),
+        radial-gradient(circle at 22% 72%, rgba(123,175,212,.42) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 76% 78%, rgba(123,175,212,.5) 0 2px, transparent 3px),
+        radial-gradient(circle at 50% 12%, rgba(123,175,212,.32) 0 1px, transparent 2px),
+        linear-gradient(36deg, transparent 43%, rgba(123,175,212,.18) 44%, transparent 45%),
+        linear-gradient(142deg, transparent 52%, rgba(123,175,212,.14) 53%, transparent 54%);
+      transition: opacity .7s ease;
+    }
+
+    .vitrine:hover::after {
+      opacity: 1;
+    }
+
+    .artifact-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(.86) contrast(.98) brightness(1.02);
+      transition: transform .35s ease, filter .35s ease;
+    }
+
+    .vitrine:hover .artifact-photo {
+      transform: scale(1.035);
+      filter: saturate(.96) contrast(1.03) brightness(1.02);
+    }
+
+    .zoomable {
+      cursor: zoom-in;
+    }
+
+    .ring-object {
+      width: min(72vw, 390px);
+      aspect-ratio: 1.72;
+      border-radius: 50%;
+      border: 17px solid transparent;
+      background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(177,190,194,.64), rgba(255,255,255,.88)) border-box;
+      -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      filter: drop-shadow(0 34px 58px rgba(23, 26, 29, .16));
+      transform: rotateX(60deg) rotateZ(-18deg);
+      transition: transform .24s ease;
+    }
+
+    .ring-object:hover {
+      transform: rotateX(60deg) rotateZ(-18deg) scale(1.04);
+    }
+
+    .s59-mask {
+      width: min(74%, 340px);
+      aspect-ratio: 1 / 1.24;
+      border-radius: 45% 45% 50% 50% / 34% 34% 58% 58%;
+      position: relative;
+      background:
+        radial-gradient(ellipse at 35% 31%, rgba(255,255,255,.92), transparent 10%),
+        radial-gradient(ellipse at 65% 31%, rgba(255,255,255,.85), transparent 10%),
+        linear-gradient(145deg, rgba(255,255,255,.14), rgba(159,203,216,.18), rgba(255,255,255,.34));
+      border: 1px solid rgba(255,255,255,.82);
+      box-shadow:
+        inset 0 0 34px rgba(255,255,255,.72),
+        inset 0 -18px 42px rgba(63,120,141,.08),
+        0 38px 80px rgba(23, 26, 29, .13);
+      opacity: .7;
+      transition: transform .24s ease, opacity .24s ease;
+    }
+
+    .s59-mask:hover {
+      transform: translateY(-8px) scale(1.03);
+      opacity: .86;
+    }
+
+    .s59-mask::before,
+    .s59-mask::after {
+      content: "";
+      position: absolute;
+      top: 32%;
+      width: 22%;
+      height: 8%;
+      border: 1px solid rgba(63,120,141,.22);
+      border-top: 0;
+      border-radius: 0 0 999px 999px;
+    }
+
+    .s59-mask::before { left: 23%; transform: rotate(5deg); }
+    .s59-mask::after { right: 23%; transform: rotate(-5deg); }
+
+    .mask-glint {
+      position: absolute;
+      left: 51%;
+      top: 18%;
+      height: 48%;
+      border-left: 1px solid rgba(255,255,255,.92);
+      transform: rotate(17deg);
+    }
+
+    .readout {
+      display: grid;
+      gap: 10px;
+      margin-top: 26px;
+      padding: 20px;
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      background: rgba(255,255,255,.58);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .readout div {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid rgba(223,230,230,.72);
+      padding-bottom: 10px;
+    }
+
+    .readout div:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .readout strong {
+      color: var(--ink);
+      font-weight: 500;
+      text-align: right;
+    }
+
+    .archive-section {
+      background:
+        linear-gradient(180deg, var(--white) 0%, #f7f5ef 100%);
+      overflow: hidden;
+    }
+
+    .archive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .connection-map {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(100px, 1fr));
+      gap: 0;
+      align-items: start;
+      margin: 28px 0 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .connection-step {
+      position: relative;
+      min-width: 82px;
+      padding-top: 18px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .connection-step::before {
+      content: "";
+      position: absolute;
+      top: 1px;
+      left: 50%;
+      width: 7px;
+      height: 7px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: var(--blue);
+      opacity: .76;
+      box-shadow: 0 0 0 5px rgba(123,175,212,.08);
+    }
+
+    .connection-step::after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: calc(50% + 9px);
+      width: calc(100% - 18px);
+      height: 1px;
+      background: linear-gradient(90deg, rgba(123,175,212,.32), rgba(123,175,212,.05));
+    }
+
+    .connection-step:last-child::after {
+      display: none;
+    }
+
+    .archive-controls {
+      display: flex;
+      gap: 10px;
+      flex: 0 0 auto;
+    }
+
+    .icon-btn {
+      width: 46px;
+      height: 46px;
+      border: 1px solid var(--faint);
+      border-radius: 50%;
+      background: rgba(255,255,255,.72);
+      color: var(--ink);
+      font-size: 22px;
+    }
+
+    .archive-track {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(320px, 66%);
+      gap: 22px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 12px 0 26px;
+      scrollbar-width: thin;
+    }
+
+    .archive-slide {
+      scroll-snap-align: start;
+      border: 1px solid #d9d1c0;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .archive-image {
+      min-height: 470px;
+      position: relative;
+      overflow: hidden;
+      background: var(--paper);
+      isolation: isolate;
+    }
+
+    .archive-image img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: contrast(.96) brightness(1.04);
+      opacity: .94;
+      transform: scale(1.02);
+      transition: transform .38s ease, filter .38s ease;
+    }
+
+    .archive-slide:hover img {
+      transform: scale(1.055);
+      filter: contrast(1) brightness(1.02);
+    }
+
+    .archive-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(244,240,230,.18), rgba(244,240,230,.86)),
+        repeating-linear-gradient(0deg, transparent 0 8px, rgba(78,74,65,.04) 9px);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .archive-note {
+      position: absolute;
+      z-index: 2;
+      right: 18px;
+      top: 18px;
+      width: min(310px, calc(100% - 36px));
+      border: 1px solid rgba(78,74,65,.22);
+      border-radius: 8px;
+      background: rgba(250,247,238,.76);
+      backdrop-filter: blur(5px);
+      padding: 16px;
+      color: var(--archive-ink);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .archive-copy {
+      padding: 24px;
+      color: var(--archive-ink);
+    }
+
+    .archive-copy h3 {
+      font-family: var(--font-grey);
+      font-size: clamp(30px, 4vw, 48px);
+    }
+
+    .no-break {
+      white-space: nowrap;
+    }
+
+    .archive-copy p {
+      max-width: 760px;
+      margin: 14px 0 0;
+      font-family: var(--font-grey);
+      font-size: 21px;
+      line-height: 1.42;
+    }
+
+    .archive-copy .plain-note {
+      font-family: var(--font-blue);
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .interstellar-map {
+      margin-top: 28px;
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      background: rgba(255,255,255,.55);
+      padding: 20px;
+    }
+
+    .map-line {
+      position: relative;
+      height: 92px;
+      margin: 14px 0;
+      background:
+        radial-gradient(circle at 12% 45%, var(--blue) 0 4px, transparent 5px),
+        radial-gradient(circle at 36% 32%, rgba(123,175,212,.55) 0 2px, transparent 3px),
+        radial-gradient(circle at 58% 64%, rgba(123,175,212,.4) 0 2px, transparent 3px),
+        radial-gradient(circle at 83% 44%, #8f9698 0 4px, transparent 5px),
+        linear-gradient(14deg, transparent 21%, rgba(123,175,212,.18) 22%, transparent 23%),
+        linear-gradient(-10deg, transparent 48%, rgba(123,175,212,.16) 49%, transparent 50%);
+    }
+
+    .map-caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .artifact-section {
+      border-top: 1px solid var(--faint);
+      background:
+        radial-gradient(circle at 35% 18%, rgba(159,203,216,.14), transparent 24rem),
+        linear-gradient(180deg, var(--white-blue), var(--white));
+    }
+
+    .s59-sequence {
+      margin-top: 64px;
+    }
+
+    .s59-sequence .connection-map {
+      grid-template-columns: repeat(6, minmax(110px, 1fr));
+    }
+
+    .s59-track {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(320px, 64%);
+      gap: 22px;
+      margin-top: 28px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 12px 0 26px;
+      scrollbar-width: thin;
+    }
+
+    .s59-card {
+      scroll-snap-align: start;
+      border: 1px solid #d9d1c0;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: 0 16px 50px rgba(23,26,29,.08);
+    }
+
+    .s59-card .archive-image {
+      min-height: 330px;
+    }
+
+    .s59-card .archive-copy {
+      padding: 22px;
+    }
+
+    .s59-card .archive-copy h3 {
+      font-size: clamp(25px, 3vw, 38px);
+      line-height: 1.08;
+      overflow-wrap: anywhere;
+    }
+
+    .warning { color: var(--warning); }
+
+    .floating-sponsors {
+      position: fixed;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .sponsor {
+      position: absolute;
+      width: min(230px, calc(100vw - 32px));
+      border: 1px solid rgba(203,210,209,.72);
+      border-radius: 8px;
+      background: rgba(252,252,250,.6);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 14px 42px rgba(23,26,29,.08);
+      padding: 12px 36px 12px 14px;
+      pointer-events: auto;
+      animation: adFloat 9s ease-in-out infinite alternate;
+    }
+
+    .sponsor.popping {
+      animation: adPop .34s ease forwards;
+    }
+
+    .sponsor:nth-child(1) {
+      left: 18px;
+      bottom: 22px;
+    }
+
+    .sponsor:nth-child(2) {
+      right: 22px;
+      bottom: 28px;
+      animation-delay: -2s;
+    }
+
+    .sponsor:nth-child(3) {
+      right: 9%;
+      top: 118px;
+      animation-delay: -4s;
+    }
+
+    .sponsor:nth-child(4) {
+      left: 7%;
+      top: 48%;
+      animation-delay: -6s;
+    }
+
+    .sponsor strong {
+      font-size: 13px;
+    }
+
+    .sponsor p {
+      font-size: 12px;
+      line-height: 1.35;
+      margin-top: 5px;
+    }
+
+    .ad-close {
+      position: absolute;
+      right: 7px;
+      top: 7px;
+      width: 22px;
+      height: 22px;
+      border: 1px solid rgba(203,210,209,.8);
+      border-radius: 50%;
+      background: rgba(255,255,255,.72);
+      color: var(--muted);
+      line-height: 1;
+    }
+
+    @keyframes adFloat {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(8px, -10px, 0); }
+    }
+
+    @keyframes adPop {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+      55% {
+        opacity: .82;
+        transform: scale(1.08);
+        filter: blur(.2px);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(.72);
+        filter: blur(5px);
+      }
+    }
+
+    .reflection-section {
+      background:
+        radial-gradient(circle at 72% 20%, rgba(159,203,216,.14), transparent 23rem),
+        linear-gradient(180deg, #fff, #f8faf9);
+    }
+
+    .reflection-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .95fr);
+      gap: clamp(30px, 6vw, 70px);
+      align-items: stretch;
+      margin-top: 36px;
+    }
+
+    .reflection-archive-panel {
+      display: none;
+      margin-top: 36px;
+    }
+
+    .reflection-archive-panel.open {
+      display: block;
+    }
+
+    .blue-star-scene {
+      min-height: 500px;
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 48% 28%, rgba(255,255,255,.95), transparent 8rem),
+        linear-gradient(135deg, rgba(159,203,216,.14), rgba(255,255,255,.82));
+      box-shadow: var(--shadow);
+    }
+
+    .reflection-photo {
+      min-height: 500px;
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .reflection-photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+      object-fit: cover;
+    }
+
+    .figure {
+      position: absolute;
+      bottom: 0;
+      width: 33%;
+      height: 78%;
+      border-radius: 48% 48% 0 0;
+      background:
+        radial-gradient(ellipse at 50% 18%, rgba(255,255,255,.72), transparent 26%),
+        linear-gradient(180deg, rgba(176,211,220,.45), rgba(118,158,176,.18));
+      border: 1px solid rgba(63,120,141,.18);
+    }
+
+    .figure.child { left: 20%; width: 21%; height: 47%; }
+    .figure.mother { right: 18%; }
+
+    .figure::before {
+      content: "";
+      position: absolute;
+      top: 15%;
+      left: 31%;
+      width: 38%;
+      aspect-ratio: 1.9;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 50%, rgba(63,120,141,.82) 0 9%, transparent 10%),
+        radial-gradient(circle at 70% 50%, rgba(115,147,154,.78) 0 9%, transparent 10%);
+      animation: eyeShift 5s ease-in-out infinite alternate;
+    }
+
+    @keyframes eyeShift {
+      from { filter: hue-rotate(0deg); opacity: .74; }
+      to { filter: hue-rotate(70deg); opacity: .96; }
+    }
+
+    .glass-case {
+      position: absolute;
+      left: 50%;
+      bottom: 7%;
+      transform: translateX(-50%);
+      width: 52%;
+      height: 46%;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 8px;
+      background: linear-gradient(90deg, rgba(255,255,255,.14), rgba(255,255,255,.52), rgba(255,255,255,.12));
+      box-shadow: inset 0 0 30px rgba(255,255,255,.55);
+    }
+
+    .glass-case .s59-mask {
+      position: absolute;
+      left: 50%;
+      top: 16%;
+      width: 33%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .book {
+      min-height: 500px;
+      border: 1px solid #d9d1c0;
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(78,74,65,.06), transparent 9%, transparent 91%, rgba(78,74,65,.06)),
+        var(--paper);
+      box-shadow: var(--shadow);
+      color: var(--archive-ink);
+      display: grid;
+      grid-template-rows: 1fr auto;
+      perspective: 1000px;
+    }
+
+    .book-page {
+      display: none;
+      padding: clamp(26px, 5vw, 46px);
+      transform-origin: left center;
+    }
+
+    .book-page.active {
+      display: block;
+      animation: pageTurn .32s ease;
+    }
+
+    @keyframes pageTurn {
+      from { opacity: .5; transform: rotateY(-7deg); }
+      to { opacity: 1; transform: rotateY(0); }
+    }
+
+    .book-page h3 {
+      font-family: var(--font-grey);
+      font-size: clamp(31px, 4vw, 50px);
+    }
+
+    .book-page .visitor {
+      color: var(--archive-ink);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .book-page p {
+      margin: 20px 0 0;
+      font-family: var(--font-grey);
+      font-size: clamp(21px, 3vw, 31px);
+      line-height: 1.32;
+      white-space: pre-line;
+    }
+
+    .book-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-top: 1px solid rgba(78,74,65,.14);
+      padding: 16px;
+    }
+
+    .page-count {
+      color: var(--archive-ink);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .reflection-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .reflection-form textarea {
+      width: 100%;
+      min-height: 132px;
+      border: 1px solid #d9d1c0;
+      border-radius: 8px;
+      background: rgba(255,255,255,.5);
+      padding: 14px;
+      resize: vertical;
+      color: var(--archive-ink);
+    }
+
+    .anonymous-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .anonymous-list blockquote {
+      margin: 0;
+      border-left: 2px solid rgba(63,120,141,.34);
+      padding-left: 12px;
+      color: var(--archive-ink);
+      font-family: var(--font-grey);
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .final-choice {
+      margin-top: 36px;
+      padding: clamp(22px, 4vw, 34px);
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      background: rgba(255,255,255,.66);
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .choice-grid button {
+      min-height: 64px;
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      background: rgba(255,255,255,.74);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      letter-spacing: .08em;
+    }
+
+    .choice-grid button:hover,
+    .choice-grid button.selected {
+      border-color: rgba(63,120,141,.4);
+      background: rgba(159,203,216,.15);
+    }
+
+    .prediction-result {
+      min-height: 30px;
+      margin-top: 18px;
+      color: var(--blue-deep);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    footer {
+      border-top: 1px solid var(--faint);
+      padding: 34px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .footer-inner a {
+      color: var(--blue-deep);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(63,120,141,.24);
+    }
+
+    .lightbox,
+    .easter-egg {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(252,252,250,.82);
+      backdrop-filter: blur(18px);
+    }
+
+    .lightbox.open,
+    .easter-egg.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(980px, 100%);
+      max-height: min(86svh, 760px);
+      overflow: auto;
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 3vw, 30px);
+      position: relative;
+    }
+
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      width: 42px;
+      height: 42px;
+      transform: translateY(-50%);
+      border: 1px solid var(--faint);
+      border-radius: 50%;
+      background: rgba(255,255,255,.86);
+      color: var(--ink);
+      z-index: 3;
+      font-size: 24px;
+    }
+
+    .modal-nav.prev {
+      left: 12px;
+    }
+
+    .modal-nav.next {
+      right: 12px;
+    }
+
+    .modal-close {
+      position: sticky;
+      top: 0;
+      float: right;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--faint);
+      border-radius: 50%;
+      background: rgba(255,255,255,.86);
+      z-index: 2;
+    }
+
+    .modal-image {
+      width: 100%;
+      max-height: 68svh;
+      object-fit: contain;
+      display: block;
+      filter: grayscale(1);
+    }
+
+    .modal-artifact {
+      min-height: 520px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(159,203,216,.14), transparent 18rem),
+        var(--white);
+    }
+
+    .egg-panel {
+      font-family: var(--font-mono);
+      color: var(--ink);
+    }
+
+    .egg-panel h2 {
+      font-family: var(--font-mono);
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.15;
+    }
+
+    .egg-route {
+      margin-top: 22px;
+      padding: 18px;
+      border: 1px solid var(--faint);
+      border-radius: 8px;
+      background: rgba(159,203,216,.08);
+      overflow-wrap: anywhere;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media (max-width: 940px) {
+      .split,
+      .artifact-grid,
+      .reflection-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .archive-header {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .archive-track {
+        grid-auto-columns: minmax(300px, 88%);
+      }
+
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .floating-sponsors {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .floating-sponsors {
+        display: none;
+      }
+
+      .topbar-inner {
+        min-height: auto;
+        padding: 12px 0;
+        align-items: start;
+        flex-direction: column;
+      }
+
+      nav {
+        justify-content: flex-start;
+      }
+
+      nav a {
+        padding: 0 8px;
+      }
+
+      section {
+        padding: 70px 0;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .vitrine,
+      .blue-star-scene,
+      .book {
+        min-height: 420px;
+      }
+
+      .archive-image {
+        min-height: 390px;
+      }
+
+      .choice-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .s59-track {
+        grid-auto-columns: minmax(300px, 88%);
+      }
+    }
+
+    .modal-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .modal-text {
+      border-left: 1px solid var(--faint);
+      padding-left: 22px;
+    }
+
+    .modal-text h3 {
+      font-family: var(--font-grey);
+      font-size: clamp(28px, 4vw, 46px);
+    }
+
+    .modal-text p {
+      color: var(--muted);
+    }
+
+    @media (max-width: 820px) {
+      .modal-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-text {
+        border-left: 0;
+        padding-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="constellation" aria-hidden="true">
+    <span class="star-node" style="--x:7%;--y:13%;--s:2px;--o:.34;--t:9s;--d:-1s;--l:74px;--r:24deg"></span>
+    <span class="star-node" style="--x:17%;--y:31%;--s:3px;--o:.2;--t:12s;--d:-5s"></span>
+    <span class="star-node" style="--x:28%;--y:9%;--s:1px;--o:.28;--t:11s;--d:-3s;--l:95px;--r:148deg"></span>
+    <span class="star-node" style="--x:43%;--y:21%;--s:4px;--o:.18;--t:14s;--d:-6s"></span>
+    <span class="star-node" style="--x:62%;--y:12%;--s:2px;--o:.32;--t:10s;--d:-2s;--l:110px;--r:28deg"></span>
+    <span class="star-node" style="--x:79%;--y:25%;--s:3px;--o:.22;--t:13s;--d:-8s"></span>
+    <span class="star-node" style="--x:91%;--y:8%;--s:1px;--o:.3;--t:15s;--d:-4s"></span>
+    <span class="star-node" style="--x:12%;--y:58%;--s:2px;--o:.24;--t:12s;--d:-7s;--l:88px;--r:-18deg"></span>
+    <span class="star-node" style="--x:35%;--y:69%;--s:3px;--o:.18;--t:10s;--d:-3s"></span>
+    <span class="star-node" style="--x:52%;--y:53%;--s:1px;--o:.34;--t:16s;--d:-9s;--l:120px;--r:153deg"></span>
+    <span class="star-node" style="--x:74%;--y:62%;--s:2px;--o:.25;--t:12s;--d:-1s"></span>
+    <span class="star-node" style="--x:88%;--y:78%;--s:4px;--o:.16;--t:18s;--d:-11s"></span>
+    <span class="star-node" style="--x:21%;--y:86%;--s:1px;--o:.29;--t:13s;--d:-2s;--l:70px;--r:9deg"></span>
+    <span class="star-node" style="--x:47%;--y:91%;--s:2px;--o:.2;--t:14s;--d:-6s"></span>
+    <span class="star-node" style="--x:68%;--y:84%;--s:3px;--o:.19;--t:11s;--d:-4s;--l:92px;--r:-36deg"></span>
+  </div>
+  <section class="ticket-gate" id="admission">
+    <div class="ticket-terminal">
+      <p class="eyebrow">Online Admission Portal</p>
+      <h1>Purchase Virtual Admission</h1>
+      <p class="lede">Blue Planet Museum visitor access for The Grey Civilization: A Lifestyle Exhibition.</p>
+      <div class="select-hint" aria-hidden="true">Select an option</div>
+      <form class="ticket-form" id="ticketForm">
+        <fieldset class="ticket-fieldset">
+          <legend>Visitor Type</legend>
+          <label class="ticket-option"><input type="radio" name="visitorType" checked> Individual explorer</label>
+          <label class="ticket-option"><input type="radio" name="visitorType"> Family visit</label>
+          <label class="ticket-option"><input type="radio" name="visitorType"> Educational group</label>
+        </fieldset>
+        <div class="ticket-price" aria-label="Ticket price">
+          <span>Standard Memory Access</span>
+          <strong>£0.00</strong>
+        </div>
+        <fieldset class="ticket-fieldset">
+          <legend>Payment Method</legend>
+          <label class="ticket-option"><input type="radio" name="paymentMethod" checked> BluePay</label>
+          <label class="ticket-option"><input type="radio" name="paymentMethod"> Neural Credit</label>
+          <label class="ticket-option"><input type="radio" name="paymentMethod"> Emotional Exchange</label>
+        </fieldset>
+        <button class="btn primary" type="submit">Purchase Virtual Admission</button>
+        <p class="ticket-result" id="ticketResult" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#entrance" aria-label="Blue Planet Museum">
+        <span class="brand-planet" aria-hidden="true"></span>
+        <span class="brand-text">
+          <strong>BLUE PLANET MUSEUM</strong>
+          <span>Interstellar Cultural Archive</span>
+        </span>
+      </a>
+      <nav aria-label="Exhibition navigation">
+        <a href="#neural-ring">N-01</a>
+        <a href="#archives">Archive Room</a>
+        <a href="#s59">S59</a>
+        <a href="#reflection">Reflection</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="exhibition-main">
+    <section class="hero" id="entrance">
+      <div class="shell fade-in">
+        <div class="hero-planet" aria-hidden="true"></div>
+        <p class="eyebrow">BLUE PLANET MUSEUM PRESENTS</p>
+        <h1>THE GREY CIVILIZATION</h1>
+        <p class="hero-subtitle">A Lifestyle Exhibition</p>
+        <p class="exhibition-type">Connection, Transparency, and the Right to Remain Unknown</p>
+        <p class="date-line">12.07.2168 — 30.09.2168</p>
+        <p class="tagline">"Exploring civilizations through their forgotten emotions."</p>
+        <div class="button-row">
+          <a class="btn primary" href="#neural-ring">Enter Exhibition</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="overview">
+      <div class="shell split">
+        <div class="fade-in">
+          <p class="eyebrow">Exhibition Introduction</p>
+          <h2>A preserved record of a civilization that made thought readable, then tried to recover uncertainty.</h2>
+          <p class="lede">Grey Star records describe an age of material abundance, automated care, and reduced conflict. Their most influential invention began as a good-faith companion technology. Later, outside its original purpose, it became the interface through which society measured sincerity, risk, and belonging.</p>
+        </div>
+        <div class="fade-in">
+          <div class="meta-grid">
+            <div class="museum-card meta">
+              <span class="mono-label">Research Status</span>
+              <strong>Incomplete</strong>
+              <p>Recovered archives contain deliberate gaps around privacy, judicial prediction, and late diplomatic shielding.</p>
+            </div>
+            <div class="museum-card meta">
+              <span class="mono-label">Known Condition</span>
+              <strong>Material Abundance</strong>
+              <p>Production, housing, transit, and healthcare records suggest a stable society with little visible scarcity.</p>
+            </div>
+            <div class="museum-card meta">
+              <span class="mono-label">Unresolved</span>
+              <strong>Uncertainty</strong>
+              <p>When did being understood stop feeling like care and begin to feel like permission being removed?</p>
+            </div>
+          </div>
+          <div class="interstellar-map" aria-label="Interstellar cultural map">
+            <span class="mono-label">Interstellar Cultural Map</span>
+            <div class="map-line" aria-hidden="true"></div>
+            <div class="map-caption">
+              <span>Blue Star Observer</span>
+              <span>Location: Unavailable</span>
+              <span>Grey Star Record: Preserved</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="artifact-room" id="neural-ring">
+      <div class="shell artifact-grid">
+        <div class="vitrine fade-in zoomable" data-modal="image" data-title="N-01 Neural Ring" data-src="assets/artifacts/neural-ring-closeup.png" aria-label="Click to enlarge the Neural Ring artifact">
+          <img class="artifact-photo" src="assets/artifacts/neural-ring-closeup.png" alt="Close-up of the N-01 Neural Ring floating in a museum display case">
+        </div>
+        <div class="fade-in">
+          <p class="eyebrow">Artifact Room 01</p>
+          <h2>N-01: The Neural Ring</h2>
+          <p class="lede">The first Neural Rings were not designed for governance. Their early name, Companion Enhancement Ring, appears in domestic support manuals, counseling posters, workplace culture-building material, and hospital records. They promised to reduce misunderstandings in everyday life. For a time, the promise was real.</p>
+          <div class="readout" aria-label="Neural Ring metadata">
+            <div><span>ARTIFACT ID</span><strong>N-01</strong></div>
+            <div><span>INITIAL PURPOSE</span><strong>CONNECTION SUPPORT</strong></div>
+            <div><span>PUBLIC STATUS</span><strong>NORMALISED</strong></div>
+            <div><span>LATER INTERFACE</span><strong>INTENTION READING</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="archive-section" id="archives">
+      <div class="shell">
+        <div class="archive-header fade-in">
+          <div>
+            <p class="eyebrow">Archive Room</p>
+            <h2>Recovered Grey Star Plates</h2>
+            <p class="lede">Slide through the archive. Click any plate to enlarge it. These are not scene illustrations; they are recovered museum plates, each preserving one change in the social life of understanding.</p>
+          </div>
+          <div class="archive-controls" aria-label="Archive controls">
+            <button class="icon-btn" type="button" id="archivePrev" aria-label="Previous archive plate">‹</button>
+            <button class="icon-btn" type="button" id="archiveNext" aria-label="Next archive plate">›</button>
+          </div>
+        </div>
+
+        <div class="connection-map fade-in" aria-label="Archive connection nodes">
+          <span class="connection-step">Loneliness</span>
+          <span class="connection-step">Care</span>
+          <span class="connection-step">Connection</span>
+          <span class="connection-step">Advantage</span>
+          <span class="connection-step">Silence</span>
+          <span class="connection-step">Transparency</span>
+          <span class="connection-step">Prediction</span>
+        </div>
+
+        <div class="archive-track fade-in" id="archiveTrack" tabindex="0" aria-label="Scrollable archive plates">
+          <article class="archive-slide">
+            <div class="archive-image zoomable" data-gallery="archive" data-modal="image" data-title="Before the Neural Ring" data-src="assets/archive/01-before-neural-ring.png">
+              <img src="assets/archive/01-before-neural-ring.png" alt="Archive illustration of isolated people in lit apartment windows before the Neural Ring">
+              <div class="archive-note">ARCHIVE PLATE 01<br>BEFORE N-01<br>Problem recorded: isolation</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">Recovered Plate 01</span>
+              <h3>Before the Neural Ring</h3>
+              <p>Grey Star had everything they needed. Except a reliable way to reach each other.</p>
+              <p class="plain-note">The earliest records do not describe scarcity. They describe citizens surrounded by systems of care, still unable to make their loneliness legible.</p>
+            </div>
+          </article>
+
+          <article class="archive-slide">
+            <div class="archive-image zoomable" data-gallery="archive" data-modal="image" data-title="Birth of the Neural Ring" data-src="assets/archive/02-birth-neural-ring.png">
+              <img src="assets/archive/02-birth-neural-ring.png" alt="Archive illustration of a scientist gently placing the first Neural Ring near a person's temple">
+              <div class="archive-note">ARCHIVE PLATE 02<br>COMPANION ENHANCEMENT RING<br>Initial function: care</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">Recovered Plate 02</span>
+              <h3><span class="no-break">A Technology</span> of Good Faith</h3>
+              <p>Originally, it was never created to control people. It was created because people were tired of being alone.</p>
+              <p class="plain-note">Early museum annotations classify N-01 as medical culture, not political infrastructure.</p>
+            </div>
+          </article>
+
+          <article class="archive-slide">
+            <div class="archive-image zoomable" data-gallery="archive" data-modal="image" data-title="First Connection" data-src="assets/archive/03-first-connection.png">
+              <img src="assets/archive/03-first-connection.png" alt="Archive illustration of two neighbours understanding each other through an early Neural Ring">
+              <div class="archive-note">ARCHIVE PLATE 03<br>FIRST CONNECTION<br>Words supplemented by signal</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">Recovered Plate 03</span>
+              <h3>First Connection</h3>
+              <p>For the first time, people could understand what words failed to express. The world became kinder.</p>
+              <p class="plain-note">These records explain why later citizens defended the ring even after it changed shape. It had once helped.</p>
+            </div>
+          </article>
+
+          <article class="archive-slide">
+            <div class="archive-image zoomable" data-gallery="archive" data-modal="image" data-title="Invisible Advantage" data-src="assets/archive/04-invisible-advantage.png">
+              <img src="assets/archive/04-invisible-advantage.png" alt="Archive illustration of a candidate using a hidden Neural Ring in an interview">
+              <div class="archive-note">ARCHIVE PLATE 04<br>PRIVATE OPTIMISATION<br>Response timing: assisted</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">Recovered Plate 04</span>
+              <h3>Invisible Advantage</h3>
+              <p>Then someone discovered a new advantage. Understanding others was no longer just kindness. It became power.</p>
+              <p class="plain-note">Early competitive use was subtle: a pause held for the correct length, an expression returned at the correct intensity.</p>
+            </div>
+          </article>
+
+          <article class="archive-slide">
+            <div class="archive-image zoomable" data-gallery="archive" data-modal="image" data-title="When Everyone Understands Everyone" data-src="assets/archive/05-everyone-understands.png">
+              <img src="assets/archive/05-everyone-understands.png" alt="Archive illustration of two people in a cafe hesitating while both wear Neural Rings">
+              <div class="archive-note">ARCHIVE PLATE 05<br>SOCIAL NORMALISATION<br>Speech delayed by prediction</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">Recovered Plate 05</span>
+              <h3>When Everyone Understood Everyone</h3>
+              <p>When everyone learned how to communicate perfectly, nobody knew how to speak naturally anymore.</p>
+              <p class="plain-note">The technology designed to improve conversation became a layer between people.</p>
+            </div>
+          </article>
+
+          <article class="archive-slide">
+            <div class="archive-image zoomable" data-gallery="archive" data-modal="image" data-title="Transparency Era" data-src="assets/archive/06-transparency-era.png">
+              <img src="assets/archive/06-transparency-era.png" alt="Archive illustration of citizens wearing visible neural headbands in a civic transparency era">
+              <div class="archive-note">ARCHIVE PLATE 06<br>VISIBLE HONESTY PROGRAM<br>Risk detection: unified</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">Recovered Plate 06</span>
+              <h3>Transparency Era</h3>
+              <p>The system promised safety. Nobody had to hide anything anymore. Including themselves.</p>
+              <p class="plain-note">The Centre did not call this an expansion of power. It called it the unification of necessary interfaces.</p>
+            </div>
+          </article>
+
+          <article class="archive-slide">
+            <div class="archive-image zoomable" data-gallery="archive" data-modal="image" data-title="Perfect Prediction" data-src="assets/archive/07-perfect-prediction.png">
+              <img src="assets/archive/07-perfect-prediction.png" alt="Archive illustration of two people leaving a cafe date after prediction">
+              <div class="archive-note">ARCHIVE PLATE 07<br>PREDICTIVE SOCIETY<br>Compatibility: 12%</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">Recovered Plate 07</span>
+              <h3>Perfect Prediction</h3>
+              <p>The system removed most mistakes. It also removed most surprises.</p>
+              <p class="plain-note">Late records contain many rooms like this: calm, efficient, and empty of accident.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="artifact-section" id="s59">
+      <div class="shell artifact-grid">
+        <div class="vitrine fade-in zoomable" data-modal="image" data-title="S59 Invisible Mask" data-src="assets/artifacts/s59-mask-closeup.png" aria-label="Click to enlarge S59">
+          <img class="artifact-photo" src="assets/artifacts/s59-mask-closeup.png" alt="Close-up of the S59 transparent mask floating in a museum display case">
+        </div>
+        <div class="fade-in">
+          <p class="eyebrow">Artifact Room 02</p>
+          <h2>S59: The Invisible Mask</h2>
+          <p class="lede">S59 was classified as a Level I Cognitive Hazard because it returned a forbidden result: uncertainty. The wearer could not be reliably reduced to a single intention, emotion, or risk profile.</p>
+          <div class="readout" aria-label="S59 system output">
+            <div><span>READING RESULT</span><strong>UNKNOWN</strong></div>
+            <div><span>POSSIBLE EMOTIONS</span><strong>3 INTERPRETATIONS DETECTED</strong></div>
+            <div><span>INTENT</span><strong>CANNOT DETERMINE</strong></div>
+            <div><span>RECOMMENDED ACTION</span><strong>PLEASE ASK DIRECTLY</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="shell s59-sequence">
+        <div class="fade-in">
+          <p class="eyebrow">S59 Archive Sequence</p>
+          <h2>From cognitive hazard to protected privilege.</h2>
+          <p class="lede">S59 did not simply hide information. It interrupted the public system that converted emotion into evidence. The following records trace how uncertainty was first criminalised, then absorbed, then restricted.</p>
+        </div>
+        <div class="archive-controls fade-in" aria-label="S59 archive controls">
+          <button class="icon-btn" type="button" id="s59Prev" aria-label="Previous S59 record">‹</button>
+          <button class="icon-btn" type="button" id="s59Next" aria-label="Next S59 record">›</button>
+        </div>
+        <div class="connection-map fade-in" aria-label="S59 archive connection nodes">
+          <span class="connection-step">Prototype</span>
+          <span class="connection-step">Unknown</span>
+          <span class="connection-step">Question</span>
+          <span class="connection-step">Arrest</span>
+          <span class="connection-step">Regularised</span>
+          <span class="connection-step">S60</span>
+        </div>
+        <div class="s59-track fade-in" id="s59Track">
+          <article class="s59-card">
+            <div class="archive-image zoomable" data-gallery="s59" data-modal="image" data-title="Creation of S59" data-src="assets/archive/08-s59-creation.png">
+              <img src="assets/archive/08-s59-creation.png" alt="Archive illustration of human researchers creating a transparent S59 mask">
+              <div class="archive-note">S59-01<br>PROTOTYPE<br>Signal shielding begins</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">S59 Record 01</span>
+              <h3>Creation of S59</h3>
+              <p>Some members of the original Neural Ring research team built a transparent mask outside authorised channels. They did not create a machine to hide. They created a space where uncertainty could exist again.</p>
+            </div>
+          </article>
+
+          <article class="s59-card">
+            <div class="archive-image zoomable" data-gallery="s59" data-modal="image" data-title="First S59 User" data-src="assets/archive/09-first-s59-user.png">
+              <img src="assets/archive/09-first-s59-user.png" alt="Archive illustration of a person wearing S59 facing someone whose Neural Ring cannot read them">
+              <div class="archive-note">S59-02<br>READING RESULT<br>UNKNOWN</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">S59 Record 02</span>
+              <h3>First S59 User</h3>
+              <p>For generations, nobody had seen this result. <strong>"Unknown."</strong></p>
+            </div>
+          </article>
+
+          <article class="s59-card">
+            <div class="archive-image zoomable" data-gallery="s59" data-modal="image" data-title="The First Question" data-src="assets/archive/10-first-question.png">
+              <img src="assets/archive/10-first-question.png" alt="Archive illustration of two people sitting on the floor, one wearing S59, without prediction">
+              <div class="archive-note">S59-03<br>NO PREDICTION<br>Please ask directly</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">S59 Record 03</span>
+              <h3>The First Question</h3>
+              <p>The conversation was slower. But for the first time in years, the answer belonged to the person.</p>
+            </div>
+          </article>
+
+          <article class="s59-card">
+            <div class="archive-image zoomable" data-gallery="s59" data-modal="image" data-title="The Arrest Record" data-src="assets/s59/13-arrested-researchers.png">
+              <img src="assets/s59/13-arrested-researchers.png" alt="Archive illustration of S59 researchers being escorted from a research building in restraints">
+              <div class="archive-note">S59-04<br>PUBLIC ORDER VIOLATION<br>Sentence: isolation</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">S59 Record 04</span>
+              <h3>The Arrest Record</h3>
+              <p>The first S59 researchers were charged with damaging the transparent social order.</p>
+            </div>
+          </article>
+
+          <article class="s59-card">
+            <div class="archive-image zoomable" data-gallery="s59" data-modal="image" data-title="Official Regularisation" data-src="assets/s59/12-official-team.png">
+              <img src="assets/s59/12-official-team.png" alt="Archive illustration of the S59 research team in an official group photograph">
+              <div class="archive-note">S59-05<br>COGNITIVE SAFETY PROGRAM<br>Status: regularised</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">S59 Record 05</span>
+              <h3>Official Regularisation</h3>
+              <p>Three years later, the same research team was returned to society under the language of national safety.</p>
+            </div>
+          </article>
+
+          <article class="s59-card">
+            <div class="archive-image zoomable" data-gallery="s59" data-modal="image" data-title="S60 Diplomatic Shield" data-src="assets/s59/14-s60-diplomatic-shield.png">
+              <img src="assets/s59/14-s60-diplomatic-shield.png" alt="Archive illustration of officials without neural rings using an S60 diplomatic cognitive shield">
+              <div class="archive-note">S60<br>DIPLOMATIC COGNITIVE SHIELD<br>Not released publicly</div>
+            </div>
+            <div class="archive-copy">
+              <span class="mono-label">S59 Record 06</span>
+              <h3>S60 Diplomatic Shield</h3>
+              <p>The later S60 model was never opened to ordinary citizens. This was described as necessary to protect transparency.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="reflection-section" id="reflection">
+      <div class="shell">
+        <div class="fade-in">
+          <p class="eyebrow">Final Reflection Room</p>
+          <h2>An entire future civilization looks at a mask that preserved uncertainty.</h2>
+          <p class="lede">The visitor archive is not displayed automatically. The museum waits until observation has become reflection.</p>
+        </div>
+
+        <div class="reflection-grid fade-in">
+          <div class="reflection-photo zoomable" data-modal="image" data-title="Blue Star Visitors Observing S59" data-src="assets/s59/15-blue-star-crowd.png" aria-label="Blue Star visitors observing S59">
+            <img src="assets/s59/15-blue-star-crowd.png" alt="Blue Star child, mother, and crowd observing the preserved S59 mask in a museum gallery">
+          </div>
+
+          <div class="museum-card">
+            <p class="eyebrow">Visitor Reflection Archive</p>
+            <h3>Messages preserved for future visitors.</h3>
+            <p class="lede">Share your thoughts with future visitors. Your message may be preserved as a cultural artifact.</p>
+            <div class="button-row" style="justify-content:flex-start">
+              <button class="btn primary" type="button" id="revealReflection">I have finished the exhibition</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="reflection-archive-panel" id="reflectionArchivePanel">
+          <div class="book" aria-label="Flip through visitor reflections">
+            <article class="book-page active" data-page="0">
+              <span class="visitor">Visitor: Lina, age 8</span>
+              <h3>Blue Star Child</h3>
+              <p>My mother said the Grey Star civilization
+was very advanced.
+
+But I don't understand why
+they needed a mask
+to preserve a thing called "secret".
+
+I asked my mother.
+
+She said:
+
+"I don't know."
+
+I think that was the most interesting answer today.</p>
+            </article>
+
+            <article class="book-page" data-page="1">
+              <span class="visitor">Visitor: Lina's mother</span>
+              <h3>Parent Record</h3>
+              <p>I brought my daughter here
+because I wanted her to understand
+how far civilization had travelled.
+
+Instead, I found myself wondering:
+
+When did understanding someone
+become the same thing as controlling them?</p>
+            </article>
+
+            <article class="book-page" data-page="2">
+              <span class="visitor">Anonymous Archive</span>
+              <h3>Your Reflection</h3>
+              <div class="anonymous-list" id="anonymousList">
+                <blockquote>"I don't think the Grey Star civilization was evil. They were trying to help."</blockquote>
+                <blockquote>"If someone can always understand me, do I still have something that belongs only to me?"</blockquote>
+                <blockquote>"My child asked why they needed masks. I didn't know how to answer."</blockquote>
+              </div>
+              <form class="reflection-form" id="reflectionForm">
+                <textarea id="reflectionText" maxlength="280" placeholder="Share your thoughts with future visitors." aria-label="Share your thoughts with future visitors"></textarea>
+                <button class="btn primary" type="submit">Preserve Anonymously</button>
+              </form>
+            </article>
+
+            <div class="book-controls">
+              <button class="btn" type="button" id="pagePrev">Previous Page</button>
+              <span class="page-count" id="pageCount">PAGE 1 / 3</span>
+              <button class="btn" type="button" id="pageNext">Next Page</button>
+            </div>
+          </div>
+
+          <div class="final-choice">
+            <p class="eyebrow">Final Interaction</p>
+            <h3>Do you wear S59?</h3>
+            <div class="choice-grid" role="group" aria-label="Do you wear S59">
+              <button type="button" data-choice="YES">YES</button>
+              <button type="button" data-choice="NO">NO</button>
+              <button type="button" data-choice="UNCERTAIN">UNCERTAIN</button>
+            </div>
+            <p class="prediction-result" id="predictionResult" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="floating-sponsors" aria-label="Archive sponsors">
+    <div class="sponsor">
+      <button class="ad-close" type="button" aria-label="Close advertisement">×</button>
+      <span class="mono-label">Sponsored by</span>
+      <strong>NEUROCARE™</strong>
+      <p>Making understanding effortless since 2091.</p>
+    </div>
+    <div class="sponsor">
+      <button class="ad-close" type="button" aria-label="Close advertisement">×</button>
+      <span class="mono-label">Archive Partner</span>
+      <strong>MEMORY CLOUD+</strong>
+      <p>Preserve every meaningful moment.</p>
+    </div>
+    <div class="sponsor">
+      <button class="ad-close" type="button" aria-label="Close advertisement">×</button>
+      <span class="mono-label">Public Trust Layer</span>
+      <strong>TRUEINTENT API</strong>
+      <p>Reducing the burden of asking directly.</p>
+    </div>
+    <div class="sponsor">
+      <button class="ad-close" type="button" aria-label="Close advertisement">×</button>
+      <span class="mono-label">Civic Wellbeing</span>
+      <strong>CONSENSUS HOME</strong>
+      <p>Family harmony, pre-resolved.</p>
+    </div>
+  </aside>
+
+  <footer>
+    <div class="shell footer-inner">
+      <span>© 2168 Blue Planet Museum</span>
+      <span>All civilizations are preserved. Some memories are intentionally <a href="#yaoooo-s59-xi-archive-aoooo" id="unavailableLink">unavailable</a>.</span>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged exhibit view">
+    <div class="modal-card">
+      <button class="modal-close" type="button" data-close="lightbox" aria-label="Close enlarged view">×</button>
+      <button class="modal-nav prev" type="button" id="modalPrev" aria-label="Previous enlarged image">‹</button>
+      <button class="modal-nav next" type="button" id="modalNext" aria-label="Next enlarged image">›</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <div class="easter-egg" id="egg" role="dialog" aria-modal="true" aria-label="S59 hidden archive">
+    <div class="modal-card egg-panel">
+      <button class="modal-close" type="button" data-close="egg" aria-label="Close S59 archive">×</button>
+      <p class="eyebrow">Restricted Fragment</p>
+      <h2>S59 ARCHIVE: MEMORY INTENTIONALLY UNAVAILABLE</h2>
+      <p class="lede">This fragment was not erased. It was withheld from prediction.</p>
+      <div class="egg-route">archive://blue-planet-museum/yaoooo/grey-civilization/xi/s59/aoooo</div>
+      <div class="readout">
+        <div><span>ACCESS STATUS</span><strong>PARTIAL</strong></div>
+        <div><span>READING RESULT</span><strong>UNKNOWN</strong></div>
+        <div><span>FINAL NOTE</span><strong>PLEASE ASK DIRECTLY</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ticketForm = document.getElementById('ticketForm');
+    const ticketResult = document.getElementById('ticketResult');
+
+    function admitVisitor() {
+      document.body.classList.add('admitted');
+      requestAnimationFrame(() => {
+        document.getElementById('entrance').scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    ticketForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      ticketResult.textContent = 'Thank you.\n\nYour curiosity has been verified.\n\nNo personal information was required.';
+      window.setTimeout(admitVisitor, 1300);
+    });
+
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+
+    document.querySelectorAll('.fade-in').forEach((item) => fadeObserver.observe(item));
+
+    const track = document.getElementById('archiveTrack');
+    document.getElementById('archivePrev').addEventListener('click', () => {
+      track.scrollBy({ left: -Math.round(track.clientWidth * .76), behavior: 'smooth' });
+    });
+    document.getElementById('archiveNext').addEventListener('click', () => {
+      track.scrollBy({ left: Math.round(track.clientWidth * .76), behavior: 'smooth' });
+    });
+
+    const s59Track = document.getElementById('s59Track');
+    document.getElementById('s59Prev').addEventListener('click', () => {
+      s59Track.scrollBy({ left: -Math.round(s59Track.clientWidth * .76), behavior: 'smooth' });
+    });
+    document.getElementById('s59Next').addEventListener('click', () => {
+      s59Track.scrollBy({ left: Math.round(s59Track.clientWidth * .76), behavior: 'smooth' });
+    });
+
+    const lightbox = document.getElementById('lightbox');
+    const modalContent = document.getElementById('modalContent');
+    const modalPrev = document.getElementById('modalPrev');
+    const modalNext = document.getElementById('modalNext');
+    let zoomableItems = [];
+    let currentZoomIndex = -1;
+    let activeGallery = '';
+
+    function renderLightbox(trigger) {
+      const type = trigger.dataset.modal;
+      modalContent.innerHTML = '';
+
+      if (type === 'image') {
+        const title = document.createElement('p');
+        title.className = 'eyebrow';
+        title.textContent = trigger.dataset.title || 'Archive Plate';
+        const img = document.createElement('img');
+        img.className = 'modal-image';
+        img.src = trigger.dataset.src;
+        img.alt = title.textContent;
+        const textSource = trigger.closest('.archive-slide, .s59-card')?.querySelector('.archive-copy') || trigger.closest('.artifact-grid')?.querySelector('.fade-in:nth-child(2)') || trigger.closest('.reflection-grid')?.querySelector('.museum-card');
+        const layout = document.createElement('div');
+        layout.className = 'modal-layout';
+        const imageWrap = document.createElement('div');
+        imageWrap.append(title, img);
+        const textWrap = document.createElement('div');
+        textWrap.className = 'modal-text';
+        if (textSource) {
+          textWrap.innerHTML = textSource.innerHTML;
+        } else {
+          textWrap.innerHTML = '<h3>Archive Image</h3><p>Recovered museum archive illustration. Plate enlarged for visual inspection.</p>';
+        }
+        const note = document.createElement('p');
+        note.className = 'caption';
+        note.textContent = 'Recovered museum archive illustration. Plate enlarged for visual inspection.';
+        imageWrap.append(note);
+        layout.append(imageWrap, textWrap);
+        modalContent.append(layout);
+      }
+
+      if (type === 'ring' || type === 'mask') {
+        const title = document.createElement('p');
+        title.className = 'eyebrow';
+        title.textContent = type === 'ring' ? 'ARTIFACT N-01' : 'ARTIFACT S59';
+        const stage = document.createElement('div');
+        stage.className = 'modal-artifact';
+        const object = document.createElement('div');
+        object.className = type === 'ring' ? 'ring-object' : 's59-mask';
+        if (type === 'mask') {
+          const glint = document.createElement('span');
+          glint.className = 'mask-glint';
+          object.append(glint);
+        }
+        stage.append(object);
+        modalContent.append(title, stage);
+      }
+
+      const canBrowse = type === 'image' && zoomableItems.length > 1;
+      modalPrev.style.display = canBrowse ? 'block' : 'none';
+      modalNext.style.display = canBrowse ? 'block' : 'none';
+    }
+
+    function openLightbox(trigger) {
+      activeGallery = trigger.dataset.gallery || '';
+      zoomableItems = activeGallery
+        ? Array.from(document.querySelectorAll(`.zoomable[data-modal="image"][data-gallery="${activeGallery}"]`))
+        : [];
+      currentZoomIndex = zoomableItems.indexOf(trigger);
+      renderLightbox(trigger);
+      lightbox.classList.add('open');
+    }
+
+    document.querySelectorAll('.zoomable').forEach((item) => {
+      item.addEventListener('click', () => openLightbox(item));
+    });
+
+    function showAdjacentZoom(direction) {
+      if (!zoomableItems.length) return;
+      currentZoomIndex = (currentZoomIndex + direction + zoomableItems.length) % zoomableItems.length;
+      renderLightbox(zoomableItems[currentZoomIndex]);
+    }
+
+    modalPrev.addEventListener('click', () => showAdjacentZoom(-1));
+    modalNext.addEventListener('click', () => showAdjacentZoom(1));
+
+    document.querySelectorAll('.ad-close').forEach((button) => {
+      button.addEventListener('click', () => {
+        const ad = button.closest('.sponsor');
+        if (!ad) return;
+        ad.classList.add('popping');
+        window.setTimeout(() => ad.remove(), 360);
+      });
+    });
+
+    const egg = document.getElementById('egg');
+    document.getElementById('unavailableLink').addEventListener('click', (event) => {
+      event.preventDefault();
+      history.replaceState(null, '', '#yaoooo-s59-xi-archive-aoooo');
+      egg.classList.add('open');
+    });
+
+    document.querySelectorAll('[data-close]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.getElementById(button.dataset.close).classList.remove('open');
+      });
+    });
+
+    [lightbox, egg].forEach((modal) => {
+      modal.addEventListener('click', (event) => {
+        if (event.target === modal) modal.classList.remove('open');
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        lightbox.classList.remove('open');
+        egg.classList.remove('open');
+      }
+    });
+
+    const pages = Array.from(document.querySelectorAll('.book-page'));
+    const pageCount = document.getElementById('pageCount');
+    let currentPage = 0;
+
+    function showPage(index) {
+      currentPage = (index + pages.length) % pages.length;
+      pages.forEach((page, pageIndex) => page.classList.toggle('active', pageIndex === currentPage));
+      pageCount.textContent = `PAGE ${currentPage + 1} / ${pages.length}`;
+    }
+
+    document.getElementById('pagePrev').addEventListener('click', () => showPage(currentPage - 1));
+    document.getElementById('pageNext').addEventListener('click', () => showPage(currentPage + 1));
+
+    const revealReflection = document.getElementById('revealReflection');
+    const reflectionArchivePanel = document.getElementById('reflectionArchivePanel');
+    revealReflection.addEventListener('click', () => {
+      reflectionArchivePanel.classList.add('open');
+      reflectionArchivePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    const reflectionForm = document.getElementById('reflectionForm');
+    const reflectionText = document.getElementById('reflectionText');
+    const anonymousList = document.getElementById('anonymousList');
+    const storageKey = 's59-anonymous-reflections';
+
+    function renderStoredReflections() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        stored.forEach((text) => {
+          const quote = document.createElement('blockquote');
+          quote.textContent = `"${text}"`;
+          anonymousList.prepend(quote);
+        });
+      } catch (error) {
+        localStorage.removeItem(storageKey);
+      }
+    }
+
+    reflectionForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const text = reflectionText.value.trim();
+      if (!text) {
+        reflectionText.focus();
+        return;
+      }
+      const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      stored.unshift(text);
+      localStorage.setItem(storageKey, JSON.stringify(stored.slice(0, 5)));
+      const quote = document.createElement('blockquote');
+      quote.textContent = `"${text}"`;
+      anonymousList.prepend(quote);
+      reflectionForm.reset();
+    });
+
+    renderStoredReflections();
+
+    const predictionResult = document.getElementById('predictionResult');
+    document.querySelectorAll('[data-choice]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('[data-choice]').forEach((item) => item.classList.toggle('selected', item === button));
+        predictionResult.textContent = 'YOUR ANSWER CANNOT BE PREDICTED.';
+      });
+    });
+
+    if (location.hash === '#yaoooo-s59-xi-archive-aoooo') {
+      document.body.classList.add('admitted');
+      egg.classList.add('open');
+    }
+  </script>
+</body>
+</html>
