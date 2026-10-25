@@ -13,6 +13,8 @@
   var availabilityStatus = document.querySelector("[data-availability-status]");
   var languageButtons = document.querySelectorAll("[data-language-button]");
   var languagePanels = document.querySelectorAll("[data-language-panel]");
+  var pisLanguageButtons = document.querySelectorAll("[data-pis-language-button]");
+  var pisLanguagePanels = document.querySelectorAll("[data-pis-language-panel]");
 
   navLinks.forEach(function (link) {
     if (link.getAttribute("data-nav") === page) {
@@ -147,6 +149,35 @@
 
   if (window.location.hash && window.location.hash.indexOf("#recruitment-") === 0) {
     showRecruitmentLanguage(window.location.hash.replace("#recruitment-", ""));
+  }
+
+  function showPisLanguage(language) {
+    if (!pisLanguageButtons.length || !pisLanguagePanels.length) {
+      return;
+    }
+
+    pisLanguageButtons.forEach(function (button) {
+      var isSelected = button.getAttribute("data-pis-language-button") === language;
+      button.setAttribute("aria-pressed", String(isSelected));
+    });
+
+    pisLanguagePanels.forEach(function (panel) {
+      panel.hidden = panel.getAttribute("data-pis-language-panel") !== language;
+    });
+  }
+
+  pisLanguageButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      var language = button.getAttribute("data-pis-language-button");
+      showPisLanguage(language);
+      if (history.replaceState) {
+        history.replaceState(null, "", "#pis-" + language);
+      }
+    });
+  });
+
+  if (window.location.hash && window.location.hash.indexOf("#pis-") === 0) {
+    showPisLanguage(window.location.hash.replace("#pis-", ""));
   }
 
   if (availabilityForm) {

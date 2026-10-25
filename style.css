@@ -1,5 +1,5 @@
 :root {
-  --bg: #fffdf9;
+  --bg: #fffefd;
   --paper: #ffffff;
   --ink: #3d4041;
   --muted: #7f8384;
@@ -45,8 +45,8 @@ body::before {
   background:
     radial-gradient(circle at var(--mx) var(--my), rgba(169, 203, 192, 0.17), transparent 18rem),
     radial-gradient(ellipse at 82% 14%, rgba(188, 193, 189, 0.12), transparent 27rem),
-    radial-gradient(ellipse at 18% 82%, rgba(218, 214, 204, 0.12), transparent 25rem),
-    linear-gradient(180deg, #fffefa 0%, #fffdf9 48%, #faf7f0 100%);
+    radial-gradient(ellipse at 18% 82%, rgba(218, 214, 204, 0.08), transparent 25rem),
+    linear-gradient(180deg, #fffffd 0%, #fffefd 48%, #fbfaf6 100%);
   z-index: -1;
 }
 
@@ -1365,6 +1365,48 @@ textarea {
 .pis-header {
   border-bottom: 1px solid var(--line);
   padding-bottom: 2rem;
+}
+
+.pis-language-picker {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 1rem;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.pis-language-picker > span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.pis-language-picker .language-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.pis-language-picker button {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.6rem;
+}
+
+.pis-language-picker button[aria-pressed="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.pis-language-panel {
+  padding-top: 2rem;
 }
 
 .pis-header h1 {

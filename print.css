@@ -18,7 +18,8 @@ body::before,
 .site-header,
 .site-footer,
 .nav-toggle,
-.document-actions {
+.document-actions,
+.pis-language-picker {
   display: none !important;
 }
 
